@@ -31,8 +31,8 @@ var sampleIntros: [Intro] = [
           textColor: .orangeSlightlyDarker,
           circleColor: .orangeSlightlyDarker,
           bgColor: .orangeAccent),
-      .init(text: "Feelin' Full",
-          textColor: .blueSlightlyDarker,
-          circleColor: .blueSlightlyDarker,
-          bgColor: .blueAccent),
+      .init(text: "Fit & Full",
+            textColor: .orangeSlightlyDarker,
+            circleColor: .orangeSlightlyDarker,
+            bgColor: .orangeAccent),
 ]

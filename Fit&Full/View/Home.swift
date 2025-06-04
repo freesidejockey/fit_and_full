@@ -46,12 +46,6 @@ struct Home: View {
                             
                         }
                 }
-                LoginButtons()
-                    .padding(.bottom, safeArea.bottom)
-                    .padding(.top, 10)
-                    .background(.black, in: .rect(topLeadingRadius: 20,
-                                                  topTrailingRadius: 20))
-                    .shadow(color: .black.opacity(0.1), radius: 5, x: 0, y: 8)
             }
             .ignoresSafeArea()
         }
@@ -61,7 +55,7 @@ struct Home: View {
                 /// Delaying 0.15s and Starting Animation
                 let delay = UInt64(1_000_000_000 * 0.5)
                 try? await Task.sleep(nanoseconds: delay)
-                animate(0)
+                animate(0, false)
             }
         }
     }
