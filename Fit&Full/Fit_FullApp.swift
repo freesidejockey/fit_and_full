@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct Fit_FullApp: App {
@@ -13,5 +14,6 @@ struct Fit_FullApp: App {
         WindowGroup {
             ContentView()
         }
+        .modelContainer(for: [Recipe.self, Ingredient.self])
     }
 }
