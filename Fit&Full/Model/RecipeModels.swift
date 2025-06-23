@@ -8,6 +8,277 @@
 import Foundation
 import SwiftData
 
+// MARK: - Premium Recipe System
+
+/// Premium Recipe Model for JSON-based curated recipes
+struct PremiumRecipe: Codable, Identifiable {
+    let id: String
+    let name: String
+    let servings: Int
+    let rating: Double
+    let backgroundImageName: String?
+    let isLocked: Bool
+    let category: String
+    let difficulty: String
+    let description: String
+    
+    // Timing information
+    let prepTime: TimeInterval? // in seconds
+    let cookTime: TimeInterval? // in seconds
+    let restTime: TimeInterval? // in seconds
+    
+    // Ingredients and steps
+    let ingredients: [PremiumIngredient]
+    let steps: [PremiumStep]
+    
+    // Nutrition information (calculated from ingredients)
+    var totalCalories: Double {
+        ingredients.reduce(0) { $0 + $1.calories }
+    }
+    
+    var totalProtein: Double {
+        ingredients.reduce(0) { $0 + $1.protein }
+    }
+    
+    var totalCarbs: Double {
+        ingredients.reduce(0) { $0 + $1.carbs }
+    }
+    
+    var totalFat: Double {
+        ingredients.reduce(0) { $0 + $1.fat }
+    }
+    
+    // Per-serving nutrition calculations
+    var caloriesPerServing: Double {
+        totalCalories / Double(servings)
+    }
+    
+    var proteinPerServing: Double {
+        totalProtein / Double(servings)
+    }
+    
+    var carbsPerServing: Double {
+        totalCarbs / Double(servings)
+    }
+    
+    var fatPerServing: Double {
+        totalFat / Double(servings)
+    }
+    
+    /// Formatted time display helpers
+    var prepTimeFormatted: String {
+        guard let prepTime = prepTime else { return "0 min" }
+        let minutes = Int(prepTime / 60)
+        return "\(minutes) min"
+    }
+    
+    var cookTimeFormatted: String {
+        guard let cookTime = cookTime else { return "0 min" }
+        let minutes = Int(cookTime / 60)
+        return "\(minutes) min"
+    }
+    
+    var restTimeFormatted: String {
+        guard let restTime = restTime else { return "0 min" }
+        let minutes = Int(restTime / 60)
+        return "\(minutes) min"
+    }
+    
+    /// Convert to SwiftData Recipe for cooking wizard
+    func toRecipe() -> Recipe {
+        let recipe = Recipe(name: name)
+        recipe.rating = rating
+        recipe.servings = servings
+        recipe.backgroundImageName = backgroundImageName
+        recipe.prepTime = prepTime
+        recipe.cookTime = cookTime
+        recipe.restTime = restTime
+        
+        // Add ingredients
+        for premiumIngredient in ingredients {
+            let ingredient = Ingredient(
+                name: premiumIngredient.name,
+                servingSize: premiumIngredient.servingSize,
+                unit: premiumIngredient.unit,
+                calories: premiumIngredient.calories,
+                protein: premiumIngredient.protein,
+                carbs: premiumIngredient.carbs,
+                fat: premiumIngredient.fat
+            )
+            recipe.addIngredient(ingredient)
+        }
+        
+        // Add steps
+        for premiumStep in steps {
+            let step = Step(
+                stepNumber: premiumStep.stepNumber,
+                instruction: premiumStep.instruction,
+                estimatedTime: premiumStep.estimatedTime
+            )
+            recipe.addStep(step)
+        }
+        
+        return recipe
+    }
+}
+
+/// Premium Ingredient Model for JSON recipes
+struct PremiumIngredient: Codable, Identifiable {
+    let id: String
+    let name: String
+    let servingSize: Double
+    let unit: String
+    let calories: Double
+    let protein: Double
+    let carbs: Double
+    let fat: Double
+    
+    /// Formatted serving size string for display
+    var servingSizeDescription: String {
+        let formatter = NumberFormatter()
+        formatter.maximumFractionDigits = 2
+        formatter.minimumFractionDigits = 0
+        
+        let sizeString = formatter.string(from: NSNumber(value: servingSize)) ?? "\(servingSize)"
+        return "\(sizeString) \(unit)"
+    }
+    
+    /// Nutrition summary string for display
+    var nutritionSummary: String {
+        return "Cal: \(Int(calories)), P: \(Int(protein))g, C: \(Int(carbs))g, F: \(Int(fat))g"
+    }
+}
+
+/// Premium Step Model for JSON recipes
+struct PremiumStep: Codable, Identifiable {
+    let id: String
+    let stepNumber: Int
+    let instruction: String
+    let estimatedTime: TimeInterval?
+    
+    /// Formatted time estimate for display
+    var timeEstimateDescription: String? {
+        guard let estimatedTime = estimatedTime else { return nil }
+        let minutes = Int(estimatedTime / 60)
+        return minutes > 0 ? "\(minutes) min" : "< 1 min"
+    }
+}
+
+/// Premium Recipe Loader Service
+class PremiumRecipeLoader: ObservableObject {
+    @Published var premiumRecipes: [PremiumRecipe] = []
+    @Published var isLoading = false
+    @Published var errorMessage: String?
+    
+    private var cachedRecipes: [PremiumRecipe]?
+    
+    init() {
+        loadPremiumRecipes()
+    }
+    
+    /// Load all premium recipes from JSON files
+    func loadPremiumRecipes() {
+        guard cachedRecipes == nil else {
+            premiumRecipes = cachedRecipes!
+            return
+        }
+        
+        isLoading = true
+        errorMessage = nil
+        
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            do {
+                let recipes = try self?.loadRecipesFromBundle() ?? []
+                
+                DispatchQueue.main.async {
+                    self?.premiumRecipes = recipes
+                    self?.cachedRecipes = recipes
+                    self?.isLoading = false
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    self?.errorMessage = "Failed to load premium recipes: \(error.localizedDescription)"
+                    self?.isLoading = false
+                }
+            }
+        }
+    }
+    
+    /// Load recipes from app bundle JSON files
+    private func loadRecipesFromBundle() throws -> [PremiumRecipe] {
+        var allRecipes: [PremiumRecipe] = []
+        
+        // Get all JSON files from the PremiumRecipes bundle directory
+        guard let bundlePath = Bundle.main.path(forResource: "PremiumRecipes", ofType: nil),
+              let bundle = Bundle(path: bundlePath) else {
+            // Fallback: try to load from main bundle
+            return try loadRecipesFromMainBundle()
+        }
+        
+        let fileManager = FileManager.default
+        let contents = try fileManager.contentsOfDirectory(atPath: bundlePath)
+        let jsonFiles = contents.filter { $0.hasSuffix(".json") }
+        
+        for fileName in jsonFiles {
+            if let filePath = bundle.path(forResource: fileName.replacingOccurrences(of: ".json", with: ""), ofType: "json") {
+                let data = try Data(contentsOf: URL(fileURLWithPath: filePath))
+                let recipe = try JSONDecoder().decode(PremiumRecipe.self, from: data)
+                allRecipes.append(recipe)
+            }
+        }
+        
+        return allRecipes.sorted { $0.name < $1.name }
+    }
+    
+    /// Fallback: Load recipes from main bundle
+    private func loadRecipesFromMainBundle() throws -> [PremiumRecipe] {
+        var allRecipes: [PremiumRecipe] = []
+        
+        // List of premium recipe file names
+        let recipeFiles = [
+            "gourmet_salmon_teriyaki",
+            "artisan_sourdough_bread",
+            "truffle_mushroom_risotto",
+            "chocolate_lava_cake",
+            "mediterranean_quinoa_bowl"
+        ]
+        
+        for fileName in recipeFiles {
+            if let url = Bundle.main.url(forResource: fileName, withExtension: "json") {
+                let data = try Data(contentsOf: url)
+                let recipe = try JSONDecoder().decode(PremiumRecipe.self, from: data)
+                allRecipes.append(recipe)
+            }
+        }
+        
+        return allRecipes.sorted { $0.name < $1.name }
+    }
+    
+    /// Get recipes by category
+    func recipes(in category: String) -> [PremiumRecipe] {
+        premiumRecipes.filter { $0.category.lowercased() == category.lowercased() }
+    }
+    
+    /// Get locked recipes
+    var lockedRecipes: [PremiumRecipe] {
+        premiumRecipes.filter { $0.isLocked }
+    }
+    
+    /// Get unlocked recipes
+    var unlockedRecipes: [PremiumRecipe] {
+        premiumRecipes.filter { !$0.isLocked }
+    }
+    
+    /// Simulate unlocking a recipe (for future paywall integration)
+    func unlockRecipe(withId id: String) {
+        if let index = premiumRecipes.firstIndex(where: { $0.id == id }) {
+            // Note: This would typically involve server-side verification
+            // For now, we'll just mark it as unlocked locally
+            print("Recipe unlock requested for: \(premiumRecipes[index].name)")
+        }
+    }
+}
+
 /// Step Model for individual recipe steps with wizard support
 @Model
 class Step {

@@ -80,10 +80,7 @@ struct RecipeDetailsView: View {
                     RecipeIngredientsComponent(recipe: recipe)
                     
                     // Start Cooking Button
-                    Button(action: {
-                        // TODO: Navigate to cooking wizard
-                        print("Start cooking tapped for: \(recipe.name)")
-                    }) {
+                    NavigationLink(destination: CookingWizardView(recipe: recipe)) {
                         HStack {
                             Image(systemName: "play.fill")
                                 .font(.system(size: 16, weight: .medium))

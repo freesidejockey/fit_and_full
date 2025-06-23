@@ -1,0 +1,146 @@
+{
+  "id": "D4E5F6G7-H8I9-0123-DEFG-456789012345",
+  "name": "Chocolate Lava Cake",
+  "servings": 4,
+  "rating": 4.9,
+  "backgroundImageName": "chocolate_lava_premium",
+  "isLocked": false,
+  "category": "Dessert",
+  "difficulty": "Intermediate",
+  "description": "Decadent individual chocolate cakes with molten centers, served warm with vanilla ice cream and fresh berries for the ultimate dessert experience.",
+  "prepTime": 900,
+  "cookTime": 720,
+  "restTime": 300,
+  "ingredients": [
+    {
+      "id": "ING-023",
+      "name": "Dark Chocolate (70%)",
+      "servingSize": 120,
+      "unit": "grams",
+      "calories": 598,
+      "protein": 8,
+      "carbs": 46,
+      "fat": 43
+    },
+    {
+      "id": "ING-024",
+      "name": "Unsalted Butter",
+      "servingSize": 120,
+      "unit": "grams",
+      "calories": 862,
+      "protein": 1,
+      "carbs": 1,
+      "fat": 98
+    },
+    {
+      "id": "ING-025",
+      "name": "Large Eggs",
+      "servingSize": 2,
+      "unit": "whole",
+      "calories": 140,
+      "protein": 12,
+      "carbs": 2,
+      "fat": 10
+    },
+    {
+      "id": "ING-026",
+      "name": "Egg Yolks",
+      "servingSize": 2,
+      "unit": "large",
+      "calories": 110,
+      "protein": 5,
+      "carbs": 1,
+      "fat": 9
+    },
+    {
+      "id": "ING-027",
+      "name": "Granulated Sugar",
+      "servingSize": 60,
+      "unit": "grams",
+      "calories": 240,
+      "protein": 0,
+      "carbs": 60,
+      "fat": 0
+    },
+    {
+      "id": "ING-028",
+      "name": "All-Purpose Flour",
+      "servingSize": 30,
+      "unit": "grams",
+      "calories": 109,
+      "protein": 3,
+      "carbs": 23,
+      "fat": 0
+    },
+    {
+      "id": "ING-029",
+      "name": "Vanilla Extract",
+      "servingSize": 5,
+      "unit": "ml",
+      "calories": 12,
+      "protein": 0,
+      "carbs": 1,
+      "fat": 0
+    },
+    {
+      "id": "ING-030",
+      "name": "Sea Salt",
+      "servingSize": 1,
+      "unit": "pinch",
+      "calories": 0,
+      "protein": 0,
+      "carbs": 0,
+      "fat": 0
+    }
+  ],
+  "steps": [
+    {
+      "id": "STEP-023",
+      "stepNumber": 1,
+      "instruction": "Preheat oven to 425°F. Generously butter four 6-oz ramekins and dust with cocoa powder, tapping out excess.",
+      "estimatedTime": 300
+    },
+    {
+      "id": "STEP-024",
+      "stepNumber": 2,
+      "instruction": "Melt chocolate and butter in a double boiler or microwave, stirring until smooth. Let cool slightly.",
+      "estimatedTime": 240
+    },
+    {
+      "id": "STEP-025",
+      "stepNumber": 3,
+      "instruction": "In a bowl, whisk together whole eggs, egg yolks, and sugar until thick and pale, about 3-4 minutes.",
+      "estimatedTime": 240
+    },
+    {
+      "id": "STEP-026",
+      "stepNumber": 4,
+      "instruction": "Gradually whisk the chocolate mixture into the egg mixture until well combined.",
+      "estimatedTime": 120
+    },
+    {
+      "id": "STEP-027",
+      "stepNumber": 5,
+      "instruction": "Sift flour and salt over the mixture and gently fold in until just combined. Add vanilla extract.",
+      "estimatedTime": 180
+    },
+    {
+      "id": "STEP-028",
+      "stepNumber": 6,
+      "instruction": "Divide batter evenly among prepared ramekins. Can be made up to this point and refrigerated for up to 4 hours.",
+      "estimatedTime": 120
+    },
+    {
+      "id": "STEP-029",
+      "stepNumber": 7,
+      "instruction": "Bake for 12-14 minutes until edges are firm but centers still jiggle slightly when shaken.",
+      "estimatedTime": 840
+    },
+    {
+      "id": "STEP-030",
+      "stepNumber": 8,
+      "instruction": "Let cool for 1 minute, then run a knife around edges and invert onto serving plates. Serve immediately.",
+      "estimatedTime": 180
+    }
+  ]
+}

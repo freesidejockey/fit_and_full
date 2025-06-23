@@ -14,6 +14,6 @@ struct Fit_FullApp: App {
         WindowGroup {
             ContentView()
         }
-        .modelContainer(for: [Recipe.self, Ingredient.self])
+        .modelContainer(for: [Recipe.self, Ingredient.self, Step.self])
     }
 }

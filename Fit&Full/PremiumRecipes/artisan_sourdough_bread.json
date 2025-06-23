@@ -1,0 +1,116 @@
+{
+  "id": "B2C3D4E5-F6G7-8901-BCDE-F23456789012",
+  "name": "Artisan Sourdough Bread",
+  "servings": 12,
+  "rating": 4.9,
+  "backgroundImageName": "sourdough_premium",
+  "isLocked": true,
+  "category": "Baking",
+  "difficulty": "Advanced",
+  "description": "Traditional artisan sourdough with a perfectly crispy crust and tangy, airy crumb. Requires active sourdough starter and patience for the best results.",
+  "prepTime": 1800,
+  "cookTime": 2700,
+  "restTime": 86400,
+  "ingredients": [
+    {
+      "id": "ING-009",
+      "name": "Active Sourdough Starter",
+      "servingSize": 200,
+      "unit": "grams",
+      "calories": 264,
+      "protein": 8,
+      "carbs": 56,
+      "fat": 1
+    },
+    {
+      "id": "ING-010",
+      "name": "Bread Flour",
+      "servingSize": 500,
+      "unit": "grams",
+      "calories": 1825,
+      "protein": 65,
+      "carbs": 380,
+      "fat": 5
+    },
+    {
+      "id": "ING-011",
+      "name": "Whole Wheat Flour",
+      "servingSize": 100,
+      "unit": "grams",
+      "calories": 340,
+      "protein": 13,
+      "carbs": 72,
+      "fat": 2
+    },
+    {
+      "id": "ING-012",
+      "name": "Filtered Water",
+      "servingSize": 375,
+      "unit": "ml",
+      "calories": 0,
+      "protein": 0,
+      "carbs": 0,
+      "fat": 0
+    },
+    {
+      "id": "ING-013",
+      "name": "Sea Salt",
+      "servingSize": 12,
+      "unit": "grams",
+      "calories": 0,
+      "protein": 0,
+      "carbs": 0,
+      "fat": 0
+    }
+  ],
+  "steps": [
+    {
+      "id": "STEP-007",
+      "stepNumber": 1,
+      "instruction": "Ensure your sourdough starter is active and has doubled in size within 4-6 hours of feeding.",
+      "estimatedTime": 600
+    },
+    {
+      "id": "STEP-008",
+      "stepNumber": 2,
+      "instruction": "Mix flours in a large bowl. In a separate bowl, combine starter with lukewarm water until well dissolved.",
+      "estimatedTime": 300
+    },
+    {
+      "id": "STEP-009",
+      "stepNumber": 3,
+      "instruction": "Add starter mixture to flour and mix until no dry flour remains. Cover and autolyse for 30 minutes.",
+      "estimatedTime": 1800
+    },
+    {
+      "id": "STEP-010",
+      "stepNumber": 4,
+      "instruction": "Add salt and mix thoroughly. Perform 4 sets of stretch and folds every 30 minutes over 2 hours.",
+      "estimatedTime": 7200
+    },
+    {
+      "id": "STEP-011",
+      "stepNumber": 5,
+      "instruction": "Bulk ferment at room temperature for 4-6 hours until dough increases by 50% and feels jiggly.",
+      "estimatedTime": 18000
+    },
+    {
+      "id": "STEP-012",
+      "stepNumber": 6,
+      "instruction": "Pre-shape dough into a round, rest 20 minutes, then final shape into a boule or batard.",
+      "estimatedTime": 1800
+    },
+    {
+      "id": "STEP-013",
+      "stepNumber": 7,
+      "instruction": "Place in banneton seam-side up, cover, and cold retard in refrigerator for 12-24 hours.",
+      "estimatedTime": 43200
+    },
+    {
+      "id": "STEP-014",
+      "stepNumber": 8,
+      "instruction": "Preheat Dutch oven to 475°F. Score dough and bake covered for 20 minutes, then uncovered for 25 minutes until golden.",
+      "estimatedTime": 3300
+    }
+  ]
+}

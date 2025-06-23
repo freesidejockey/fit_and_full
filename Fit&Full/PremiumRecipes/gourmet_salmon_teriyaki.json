@@ -1,0 +1,134 @@
+{
+  "id": "A1B2C3D4-E5F6-7890-ABCD-EF1234567890",
+  "name": "Gourmet Salmon Teriyaki",
+  "servings": 4,
+  "rating": 4.8,
+  "backgroundImageName": "salmon_teriyaki_premium",
+  "isLocked": false,
+  "category": "Seafood",
+  "difficulty": "Intermediate",
+  "description": "Restaurant-quality salmon with homemade teriyaki glaze, perfectly balanced with umami flavors and served with steamed vegetables.",
+  "prepTime": 900,
+  "cookTime": 1200,
+  "restTime": 300,
+  "ingredients": [
+    {
+      "id": "ING-001",
+      "name": "Fresh Salmon Fillets",
+      "servingSize": 150,
+      "unit": "grams",
+      "calories": 231,
+      "protein": 31,
+      "carbs": 0,
+      "fat": 11
+    },
+    {
+      "id": "ING-002",
+      "name": "Soy Sauce",
+      "servingSize": 60,
+      "unit": "ml",
+      "calories": 35,
+      "protein": 5,
+      "carbs": 3,
+      "fat": 0
+    },
+    {
+      "id": "ING-003",
+      "name": "Mirin",
+      "servingSize": 45,
+      "unit": "ml",
+      "calories": 54,
+      "protein": 0,
+      "carbs": 12,
+      "fat": 0
+    },
+    {
+      "id": "ING-004",
+      "name": "Brown Sugar",
+      "servingSize": 30,
+      "unit": "grams",
+      "calories": 112,
+      "protein": 0,
+      "carbs": 29,
+      "fat": 0
+    },
+    {
+      "id": "ING-005",
+      "name": "Fresh Ginger",
+      "servingSize": 15,
+      "unit": "grams",
+      "calories": 12,
+      "protein": 0,
+      "carbs": 3,
+      "fat": 0
+    },
+    {
+      "id": "ING-006",
+      "name": "Garlic",
+      "servingSize": 10,
+      "unit": "grams",
+      "calories": 15,
+      "protein": 1,
+      "carbs": 3,
+      "fat": 0
+    },
+    {
+      "id": "ING-007",
+      "name": "Sesame Oil",
+      "servingSize": 10,
+      "unit": "ml",
+      "calories": 88,
+      "protein": 0,
+      "carbs": 0,
+      "fat": 10
+    },
+    {
+      "id": "ING-008",
+      "name": "Green Onions",
+      "servingSize": 20,
+      "unit": "grams",
+      "calories": 6,
+      "protein": 0,
+      "carbs": 1,
+      "fat": 0
+    }
+  ],
+  "steps": [
+    {
+      "id": "STEP-001",
+      "stepNumber": 1,
+      "instruction": "Pat salmon fillets dry and season with salt and pepper. Let come to room temperature for 15 minutes.",
+      "estimatedTime": 300
+    },
+    {
+      "id": "STEP-002",
+      "stepNumber": 2,
+      "instruction": "Prepare teriyaki sauce by combining soy sauce, mirin, brown sugar, minced ginger, and garlic in a small saucepan.",
+      "estimatedTime": 180
+    },
+    {
+      "id": "STEP-003",
+      "stepNumber": 3,
+      "instruction": "Bring sauce to a simmer over medium heat, stirring until sugar dissolves. Reduce heat and simmer for 5-7 minutes until slightly thickened.",
+      "estimatedTime": 420
+    },
+    {
+      "id": "STEP-004",
+      "stepNumber": 4,
+      "instruction": "Heat sesame oil in a large skillet over medium-high heat. Add salmon fillets skin-side up and cook for 4-5 minutes.",
+      "estimatedTime": 300
+    },
+    {
+      "id": "STEP-005",
+      "stepNumber": 5,
+      "instruction": "Flip salmon and cook for another 3-4 minutes. Brush with teriyaki glaze during the last minute of cooking.",
+      "estimatedTime": 240
+    },
+    {
+      "id": "STEP-006",
+      "stepNumber": 6,
+      "instruction": "Remove from heat and let rest for 2-3 minutes. Garnish with sliced green onions and serve with remaining teriyaki sauce.",
+      "estimatedTime": 180
+    }
+  ]
+}

@@ -1,0 +1,156 @@
+{
+  "id": "C3D4E5F6-G7H8-9012-CDEF-345678901234",
+  "name": "Truffle Mushroom Risotto",
+  "servings": 6,
+  "rating": 4.7,
+  "backgroundImageName": "truffle_risotto_premium",
+  "isLocked": true,
+  "category": "Italian",
+  "difficulty": "Intermediate",
+  "description": "Luxurious creamy risotto with wild mushrooms and truffle oil, finished with aged Parmesan and fresh herbs for an elegant dining experience.",
+  "prepTime": 1200,
+  "cookTime": 1800,
+  "restTime": 0,
+  "ingredients": [
+    {
+      "id": "ING-014",
+      "name": "Arborio Rice",
+      "servingSize": 300,
+      "unit": "grams",
+      "calories": 1050,
+      "protein": 21,
+      "carbs": 231,
+      "fat": 3
+    },
+    {
+      "id": "ING-015",
+      "name": "Mixed Wild Mushrooms",
+      "servingSize": 400,
+      "unit": "grams",
+      "calories": 88,
+      "protein": 12,
+      "carbs": 16,
+      "fat": 1
+    },
+    {
+      "id": "ING-016",
+      "name": "Vegetable Stock",
+      "servingSize": 1200,
+      "unit": "ml",
+      "calories": 48,
+      "protein": 2,
+      "carbs": 8,
+      "fat": 1
+    },
+    {
+      "id": "ING-017",
+      "name": "White Wine",
+      "servingSize": 150,
+      "unit": "ml",
+      "calories": 121,
+      "protein": 0,
+      "carbs": 4,
+      "fat": 0
+    },
+    {
+      "id": "ING-018",
+      "name": "Aged Parmesan",
+      "servingSize": 100,
+      "unit": "grams",
+      "calories": 431,
+      "protein": 38,
+      "carbs": 4,
+      "fat": 29
+    },
+    {
+      "id": "ING-019",
+      "name": "Shallots",
+      "servingSize": 80,
+      "unit": "grams",
+      "calories": 58,
+      "protein": 2,
+      "carbs": 13,
+      "fat": 0
+    },
+    {
+      "id": "ING-020",
+      "name": "Butter",
+      "servingSize": 60,
+      "unit": "grams",
+      "calories": 431,
+      "protein": 1,
+      "carbs": 0,
+      "fat": 49
+    },
+    {
+      "id": "ING-021",
+      "name": "Truffle Oil",
+      "servingSize": 15,
+      "unit": "ml",
+      "calories": 135,
+      "protein": 0,
+      "carbs": 0,
+      "fat": 15
+    },
+    {
+      "id": "ING-022",
+      "name": "Fresh Thyme",
+      "servingSize": 5,
+      "unit": "grams",
+      "calories": 1,
+      "protein": 0,
+      "carbs": 0,
+      "fat": 0
+    }
+  ],
+  "steps": [
+    {
+      "id": "STEP-015",
+      "stepNumber": 1,
+      "instruction": "Heat vegetable stock in a saucepan and keep warm over low heat throughout cooking process.",
+      "estimatedTime": 300
+    },
+    {
+      "id": "STEP-016",
+      "stepNumber": 2,
+      "instruction": "Clean and slice mushrooms. Sauté in butter until golden and caramelized, about 8-10 minutes. Set aside.",
+      "estimatedTime": 600
+    },
+    {
+      "id": "STEP-017",
+      "stepNumber": 3,
+      "instruction": "Finely dice shallots. In the same pan, sauté shallots until translucent, about 3-4 minutes.",
+      "estimatedTime": 240
+    },
+    {
+      "id": "STEP-018",
+      "stepNumber": 4,
+      "instruction": "Add Arborio rice and toast for 2 minutes, stirring constantly until edges become translucent.",
+      "estimatedTime": 120
+    },
+    {
+      "id": "STEP-019",
+      "stepNumber": 5,
+      "instruction": "Pour in white wine and stir until completely absorbed, about 2-3 minutes.",
+      "estimatedTime": 180
+    },
+    {
+      "id": "STEP-020",
+      "stepNumber": 6,
+      "instruction": "Add warm stock one ladle at a time, stirring constantly. Wait until each addition is absorbed before adding more.",
+      "estimatedTime": 1200
+    },
+    {
+      "id": "STEP-021",
+      "stepNumber": 7,
+      "instruction": "After 18-20 minutes, rice should be creamy but still al dente. Fold in mushrooms, Parmesan, and fresh thyme.",
+      "estimatedTime": 180
+    },
+    {
+      "id": "STEP-022",
+      "stepNumber": 8,
+      "instruction": "Remove from heat, drizzle with truffle oil, and serve immediately with extra Parmesan on the side.",
+      "estimatedTime": 120
+    }
+  ]
+}

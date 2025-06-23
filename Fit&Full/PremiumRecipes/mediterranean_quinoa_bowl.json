@@ -1,0 +1,170 @@
+{
+  "id": "E5F6G7H8-I9J0-1234-EFGH-567890123456",
+  "name": "Mediterranean Quinoa Bowl",
+  "servings": 4,
+  "rating": 4.6,
+  "backgroundImageName": "mediterranean_bowl_premium",
+  "isLocked": true,
+  "category": "Healthy",
+  "difficulty": "Easy",
+  "description": "Nutritious and colorful quinoa bowl with roasted vegetables, feta cheese, olives, and a zesty lemon-herb dressing for a complete Mediterranean experience.",
+  "prepTime": 900,
+  "cookTime": 1800,
+  "restTime": 0,
+  "ingredients": [
+    {
+      "id": "ING-031",
+      "name": "Quinoa",
+      "servingSize": 200,
+      "unit": "grams",
+      "calories": 716,
+      "protein": 26,
+      "carbs": 130,
+      "fat": 12
+    },
+    {
+      "id": "ING-032",
+      "name": "Cherry Tomatoes",
+      "servingSize": 300,
+      "unit": "grams",
+      "calories": 54,
+      "protein": 3,
+      "carbs": 12,
+      "fat": 1
+    },
+    {
+      "id": "ING-033",
+      "name": "Cucumber",
+      "servingSize": 200,
+      "unit": "grams",
+      "calories": 32,
+      "protein": 1,
+      "carbs": 8,
+      "fat": 0
+    },
+    {
+      "id": "ING-034",
+      "name": "Red Bell Pepper",
+      "servingSize": 150,
+      "unit": "grams",
+      "calories": 46,
+      "protein": 1,
+      "carbs": 11,
+      "fat": 0
+    },
+    {
+      "id": "ING-035",
+      "name": "Red Onion",
+      "servingSize": 100,
+      "unit": "grams",
+      "calories": 40,
+      "protein": 1,
+      "carbs": 9,
+      "fat": 0
+    },
+    {
+      "id": "ING-036",
+      "name": "Feta Cheese",
+      "servingSize": 120,
+      "unit": "grams",
+      "calories": 318,
+      "protein": 17,
+      "carbs": 5,
+      "fat": 26
+    },
+    {
+      "id": "ING-037",
+      "name": "Kalamata Olives",
+      "servingSize": 60,
+      "unit": "grams",
+      "calories": 115,
+      "protein": 1,
+      "carbs": 6,
+      "fat": 11
+    },
+    {
+      "id": "ING-038",
+      "name": "Extra Virgin Olive Oil",
+      "servingSize": 45,
+      "unit": "ml",
+      "calories": 405,
+      "protein": 0,
+      "carbs": 0,
+      "fat": 45
+    },
+    {
+      "id": "ING-039",
+      "name": "Fresh Lemon Juice",
+      "servingSize": 30,
+      "unit": "ml",
+      "calories": 7,
+      "protein": 0,
+      "carbs": 2,
+      "fat": 0
+    },
+    {
+      "id": "ING-040",
+      "name": "Fresh Oregano",
+      "servingSize": 10,
+      "unit": "grams",
+      "calories": 3,
+      "protein": 0,
+      "carbs": 1,
+      "fat": 0
+    },
+    {
+      "id": "ING-041",
+      "name": "Fresh Parsley",
+      "servingSize": 15,
+      "unit": "grams",
+      "calories": 5,
+      "protein": 0,
+      "carbs": 1,
+      "fat": 0
+    }
+  ],
+  "steps": [
+    {
+      "id": "STEP-031",
+      "stepNumber": 1,
+      "instruction": "Rinse quinoa thoroughly and cook in 2:1 ratio with water. Bring to boil, reduce heat, simmer covered for 15 minutes.",
+      "estimatedTime": 1200
+    },
+    {
+      "id": "STEP-032",
+      "stepNumber": 2,
+      "instruction": "Preheat oven to 425°F. Cut cherry tomatoes in half and red bell pepper into strips.",
+      "estimatedTime": 300
+    },
+    {
+      "id": "STEP-033",
+      "stepNumber": 3,
+      "instruction": "Toss tomatoes and peppers with 1 tbsp olive oil, salt, and pepper. Roast for 20-25 minutes until caramelized.",
+      "estimatedTime": 1500
+    },
+    {
+      "id": "STEP-034",
+      "stepNumber": 4,
+      "instruction": "Dice cucumber and red onion. Crumble feta cheese and pit olives if needed.",
+      "estimatedTime": 300
+    },
+    {
+      "id": "STEP-035",
+      "stepNumber": 5,
+      "instruction": "Make dressing by whisking together remaining olive oil, lemon juice, oregano, salt, and pepper.",
+      "estimatedTime": 180
+    },
+    {
+      "id": "STEP-036",
+      "stepNumber": 6,
+      "instruction": "Fluff quinoa with a fork and let cool slightly. Combine with roasted vegetables and fresh ingredients.",
+      "estimatedTime": 240
+    },
+    {
+      "id": "STEP-037",
+      "stepNumber": 7,
+      "instruction": "Drizzle with dressing and toss gently. Top with feta, olives, and fresh parsley before serving.",
+      "estimatedTime": 180
+    }
+  ]
+}
