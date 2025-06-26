@@ -10,6 +10,7 @@ import SwiftUI
 struct CookingWizardView: View {
     let recipe: Recipe
     @State private var currentStepIndex: Int = 0
+    @State private var showingExitConfirmation = false
     @Environment(\.dismiss) private var dismiss
     
     var currentStep: Step? {
@@ -92,6 +93,26 @@ struct CookingWizardView: View {
         .navigationTitle("Cooking")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar(.hidden, for: .tabBar)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button("Cancel") {
+                    showingExitConfirmation = true
+                }
+                .foregroundColor(.orangeAccent)
+            }
+        }
+        .confirmationDialog(
+            "Exit Cooking?",
+            isPresented: $showingExitConfirmation,
+            titleVisibility: .visible
+        ) {
+            Button("Exit Cooking", role: .destructive) {
+                dismiss()
+            }
+            Button("Continue Cooking", role: .cancel) { }
+        } message: {
+            Text("Are you sure you want to exit? Your progress will be saved, but you'll need to restart the cooking wizard.")
+        }
         .onAppear {
             // Start from the first incomplete step
             if let nextIncomplete = recipe.nextIncompleteStep,

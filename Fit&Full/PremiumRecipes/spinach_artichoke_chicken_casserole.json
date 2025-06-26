@@ -1,0 +1,170 @@
+{
+  "id": "8d558127-ab6f-4859-bf8b-3807992f4b7b",
+  "name": "High-Protein Spinach and Artichoke Chicken Casserole",
+  "servings": 4,
+  "rating": 5.0,
+  "backgroundImageName": "none",
+  "isLocked": false,
+  "category": "Casserole",
+  "difficulty": "Easy",
+  "description": "A high-protein twist on classic spinach artichoke dip, transformed into a satisfying casserole with tender chicken breast and blended cottage cheese. Each serving packs 47g of protein while maintaining all the creamy, indulgent flavors you love.",
+  "prepTime": 1800,
+  "cookTime": 1800,
+  "restTime": 1200,
+  "ingredients": [
+    {
+      "id": "ING-023",
+      "name": "Cottage Cheese (4%)",
+      "servingSize": 440,
+      "unit": "grams",
+      "calories": 320,
+      "protein": 56,
+      "carbs": 16,
+      "fat": 18
+    },
+    {
+      "id": "ING-024",
+      "name": "Boneless Skinless Chicken Breast",
+      "servingSize": 454,
+      "unit": "grams",
+      "calories": 748,
+      "protein": 140,
+      "carbs": 0,
+      "fat": 16
+    },
+    {
+      "id": "ING-025",
+      "name": "Frozen Chopped Spinach",
+      "servingSize": 170,
+      "unit": "grams",
+      "calories": 41,
+      "protein": 5,
+      "carbs": 7,
+      "fat": 1
+    },
+    {
+      "id": "ING-026",
+      "name": "Canned Artichoke Hearts",
+      "servingSize": 454,
+      "unit": "grams",
+      "calories": 91,
+      "protein": 5,
+      "carbs": 20,
+      "fat": 1
+    },
+    {
+      "id": "ING-027",
+      "name": "Low-Moisture Mozzarella Cheese",
+      "servingSize": 118,
+      "unit": "grams",
+      "calories": 378,
+      "protein": 28,
+      "carbs": 4,
+      "fat": 28
+    },
+    {
+      "id": "ING-028",
+      "name": "Grated Parmesan Cheese",
+      "servingSize": 79,
+      "unit": "grams",
+      "calories": 340,
+      "protein": 30,
+      "carbs": 3,
+      "fat": 23
+    },
+    {
+      "id": "ING-029",
+      "name": "Garlic Cloves",
+      "servingSize": 6,
+      "unit": "grams",
+      "calories": 9,
+      "protein": 0,
+      "carbs": 2,
+      "fat": 0
+    },
+    {
+      "id": "ING-030",
+      "name": "Olive Oil",
+      "servingSize": 5,
+      "unit": "ml",
+      "calories": 45,
+      "protein": 0,
+      "carbs": 0,
+      "fat": 5
+    },
+    {
+      "id": "ING-031",
+      "name": "Kosher Salt",
+      "servingSize": 2,
+      "unit": "grams",
+      "calories": 0,
+      "protein": 0,
+      "carbs": 0,
+      "fat": 0
+    },
+    {
+      "id": "ING-032",
+      "name": "Black Pepper",
+      "servingSize": 1,
+      "unit": "grams",
+      "calories": 3,
+      "protein": 0,
+      "carbs": 1,
+      "fat": 0
+    },
+    {
+      "id": "ING-033",
+      "name": "Onion Powder",
+      "servingSize": 1,
+      "unit": "grams",
+      "calories": 3,
+      "protein": 0,
+      "carbs": 1,
+      "fat": 0
+    }
+  ],
+  "steps": [
+    {
+      "id": "STEP-023",
+      "stepNumber": 1,
+      "instruction": "Preheat oven to 350°F. If time allows, heavily season cubed chicken breast with kosher salt and let sit at room temperature for 20+ minutes to dry brine.",
+      "estimatedTime": 1200
+    },
+    {
+      "id": "STEP-024",
+      "stepNumber": 2,
+      "instruction": "Place artichoke hearts in a dish towel and squeeze out excess liquid. Finely chop and set aside. Repeat with thawed spinach to remove all excess moisture.",
+      "estimatedTime": 300
+    },
+    {
+      "id": "STEP-025",
+      "stepNumber": 3,
+      "instruction": "Heat avocado oil in a large pan over medium heat. Add chicken pieces in single layer, season with black pepper, and cook 2-3 minutes per side until mostly done. Remove and set aside.",
+      "estimatedTime": 480
+    },
+    {
+      "id": "STEP-026",
+      "stepNumber": 4,
+      "instruction": "In a small food processor, blend cottage cheese, garlic, salt, pepper, and onion powder until smooth.",
+      "estimatedTime": 180
+    },
+    {
+      "id": "STEP-027",
+      "stepNumber": 5,
+      "instruction": "In baking dish, combine cooked chicken, spinach, artichokes, blended cottage cheese mixture, and ⅔ of the mozzarella and parmesan. Mix and spread evenly.",
+      "estimatedTime": 300
+    },
+    {
+      "id": "STEP-028",
+      "stepNumber": 6,
+      "instruction": "Cover with foil and bake for 20 minutes. Remove foil, sprinkle remaining cheese on top, and bake uncovered for 10 more minutes.",
+      "estimatedTime": 1800
+    },
+    {
+      "id": "STEP-029",
+      "stepNumber": 7,
+      "instruction": "Optional: Switch to broil for 2-3 minutes at the end to achieve golden, bubbly crust. Let rest briefly before serving.",
+      "estimatedTime": 300
+    }
+  ]
+}

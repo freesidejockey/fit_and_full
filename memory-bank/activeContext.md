@@ -36,3 +36,11 @@ This file tracks the project's current status, including recent changes, current
 - Creating component-based architecture for header, time info, macros, and ingredients
 - Planning data model extensions for timing information (prep, cook, rest times)
 - Ensuring integration with existing Recipe/Ingredient models and app patterns
+
+[2025-06-23 09:53:31] - UI Simplification: Remove Redundant Cancel Button from Cooking Wizard
+
+- User identified redundancy between toolbar "Cancel" button and bottom "Exit Cooking" button
+- Toolbar cancel button is sufficient for exit functionality
+- Bottom navigation should focus on step navigation (Previous/Next) only
+- Architectural decision to remove "Exit Cooking" button from CookingNavigationComponent
+- Simplifies user interface and follows iOS design patterns

@@ -21,11 +21,11 @@ struct PremiumRecipeDetailsView: View {
     
     var body: some View {
         ScrollView {
-            VStack(spacing: 20) {
+            VStack(spacing: 24) {
                 // Recipe Header Section
-                VStack(alignment: .leading, spacing: 16) {
-                    HStack {
-                        VStack(alignment: .leading, spacing: 8) {
+                VStack(alignment: .leading, spacing: 20) {
+                    HStack(alignment: .top) {
+                        VStack(alignment: .leading, spacing: 14) {
                             Text(premiumRecipe.name)
                                 .font(.largeTitle)
                                 .fontWeight(.bold)
@@ -63,7 +63,7 @@ struct PremiumRecipeDetailsView: View {
                         Spacer()
                         
                         // Action buttons
-                        HStack(spacing: 12) {
+                        VStack(spacing: 8) {
                             Button(action: { isFavorite.toggle() }) {
                                 HStack(spacing: 6) {
                                     Image(systemName: isFavorite ? "heart.fill" : "heart")
@@ -89,6 +89,7 @@ struct PremiumRecipeDetailsView: View {
                                 .cornerRadius(8)
                             }
                         }
+                        .frame(minWidth: 80)
                     }
                     
                     // Description
@@ -98,15 +99,16 @@ struct PremiumRecipeDetailsView: View {
                         .lineLimit(nil)
                 }
                 .padding(.horizontal)
+                .padding(.top, 8)
                 
                 // Time Information Section
-                PremiumRecipeTimeInfoComponent(recipe: premiumRecipe)
+                UnifiedTimeInfoComponent(recipe: premiumRecipe)
                 
                 // Macro Information Section
-                PremiumRecipeMacroComponent(recipe: premiumRecipe, servings: currentServings)
+                UnifiedMacroComponent(recipe: premiumRecipe, servings: currentServings)
                 
                 // Ingredients Section
-                PremiumRecipeIngredientsComponent(
+                UnifiedIngredientsComponent(
                     recipe: premiumRecipe,
                     currentServings: $currentServings
                 )
@@ -147,213 +149,6 @@ struct PremiumRecipeDetailsView: View {
     }
 }
 
-// MARK: - Premium Recipe Time Info Component
-
-struct PremiumRecipeTimeInfoComponent: View {
-    let recipe: PremiumRecipe
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Timing")
-                .font(.headline)
-                .padding(.horizontal)
-            
-            HStack(spacing: 20) {
-                if let prepTime = recipe.prepTime, prepTime > 0 {
-                    TimeIndicator(
-                        title: "Prep",
-                        time: recipe.prepTimeFormatted,
-                        color: .blue
-                    )
-                }
-                
-                if let cookTime = recipe.cookTime, cookTime > 0 {
-                    TimeIndicator(
-                        title: "Cook",
-                        time: recipe.cookTimeFormatted,
-                        color: .orange
-                    )
-                }
-                
-                if let restTime = recipe.restTime, restTime > 0 {
-                    TimeIndicator(
-                        title: "Rest",
-                        time: recipe.restTimeFormatted,
-                        color: .green
-                    )
-                }
-                
-                Spacer()
-            }
-            .padding(.horizontal)
-        }
-    }
-}
-
-// MARK: - Premium Recipe Macro Component
-
-struct PremiumRecipeMacroComponent: View {
-    let recipe: PremiumRecipe
-    let servings: Int
-    
-    private var adjustedCalories: Double {
-        recipe.caloriesPerServing * Double(servings) / Double(recipe.servings)
-    }
-    
-    private var adjustedProtein: Double {
-        recipe.proteinPerServing * Double(servings) / Double(recipe.servings)
-    }
-    
-    private var adjustedCarbs: Double {
-        recipe.carbsPerServing * Double(servings) / Double(recipe.servings)
-    }
-    
-    private var adjustedFat: Double {
-        recipe.fatPerServing * Double(servings) / Double(recipe.servings)
-    }
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("Nutrition (per serving)")
-                .font(.headline)
-                .padding(.horizontal)
-            
-            HStack(spacing: 0) {
-                MacroItem(
-                    title: "Calories",
-                    value: "\(Int(adjustedCalories))",
-                    unit: "cal",
-                    color: .orange
-                )
-                
-                Divider()
-                    .frame(height: 40)
-                
-                MacroItem(
-                    title: "Protein",
-                    value: "\(Int(adjustedProtein))",
-                    unit: "g",
-                    color: .blue
-                )
-                
-                Divider()
-                    .frame(height: 40)
-                
-                MacroItem(
-                    title: "Carbs",
-                    value: "\(Int(adjustedCarbs))",
-                    unit: "g",
-                    color: .green
-                )
-                
-                Divider()
-                    .frame(height: 40)
-                
-                MacroItem(
-                    title: "Fat",
-                    value: "\(Int(adjustedFat))",
-                    unit: "g",
-                    color: .purple
-                )
-            }
-            .padding(.horizontal)
-        }
-    }
-}
-
-// MARK: - Premium Recipe Ingredients Component
-
-struct PremiumRecipeIngredientsComponent: View {
-    let recipe: PremiumRecipe
-    @Binding var currentServings: Int
-    
-    private var servingMultiplier: Double {
-        Double(currentServings) / Double(recipe.servings)
-    }
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                Text("Ingredients")
-                    .font(.headline)
-                
-                Spacer()
-                
-                // Serving adjuster
-                HStack(spacing: 12) {
-                    Button(action: {
-                        if currentServings > 1 {
-                            currentServings -= 1
-                        }
-                    }) {
-                        Image(systemName: "minus.circle.fill")
-                            .foregroundColor(currentServings > 1 ? .blue : .gray)
-                            .font(.title2)
-                    }
-                    .disabled(currentServings <= 1)
-                    
-                    Text("\(currentServings) servings")
-                        .font(.headline)
-                        .fontWeight(.semibold)
-                        .frame(minWidth: 80)
-                    
-                    Button(action: {
-                        if currentServings < 20 {
-                            currentServings += 1
-                        }
-                    }) {
-                        Image(systemName: "plus.circle.fill")
-                            .foregroundColor(currentServings < 20 ? .blue : .gray)
-                            .font(.title2)
-                    }
-                    .disabled(currentServings >= 20)
-                }
-            }
-            .padding(.horizontal)
-            
-            VStack(spacing: 8) {
-                ForEach(recipe.ingredients, id: \.id) { ingredient in
-                    HStack {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text(ingredient.name)
-                                .font(.body)
-                                .fontWeight(.medium)
-                            
-                            Text(adjustedServingSize(for: ingredient))
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                        }
-                        
-                        Spacer()
-                        
-                        Button(action: {
-                            // TODO: Add to grocery list
-                        }) {
-                            Image(systemName: "plus.circle")
-                                .foregroundColor(.blue)
-                                .font(.title3)
-                        }
-                    }
-                    .padding(.horizontal)
-                    .padding(.vertical, 8)
-                    .background(.gray.opacity(0.05))
-                    .cornerRadius(8)
-                }
-            }
-            .padding(.horizontal)
-        }
-    }
-    
-    private func adjustedServingSize(for ingredient: PremiumIngredient) -> String {
-        let adjustedSize = ingredient.servingSize * servingMultiplier
-        let formatter = NumberFormatter()
-        formatter.maximumFractionDigits = 2
-        formatter.minimumFractionDigits = 0
-        
-        let sizeString = formatter.string(from: NSNumber(value: adjustedSize)) ?? "\(adjustedSize)"
-        return "\(sizeString) \(ingredient.unit)"
-    }
-}
 
 // MARK: - Preview
 

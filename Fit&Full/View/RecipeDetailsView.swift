@@ -10,6 +10,7 @@ import SwiftUI
 struct RecipeDetailsView: View {
     let recipe: Recipe?
     @State private var isFavorite: Bool = false
+    @State private var showingCookingWizard = false
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
@@ -71,33 +72,15 @@ struct RecipeDetailsView: View {
                     .padding(.top, 10)
                     
                     // Recipe Time Info Section
-                    RecipeTimeInfoComponent(recipe: recipe)
+                    UnifiedTimeInfoComponent(recipe: recipe)
                     
                     // Recipe Macro Section
-                    RecipeMacroComponent(recipe: recipe)
+                    UnifiedMacroComponent(recipe: recipe)
                     
                     // Recipe Ingredients Section
-                    RecipeIngredientsComponent(recipe: recipe)
+                    UnifiedIngredientsComponent(recipe: recipe)
                     
-                    // Start Cooking Button
-                    NavigationLink(destination: CookingWizardView(recipe: recipe)) {
-                        HStack {
-                            Image(systemName: "play.fill")
-                                .font(.system(size: 16, weight: .medium))
-                            
-                            Text("Start Cooking")
-                                .font(.system(size: 18, weight: .semibold))
-                        }
-                        .foregroundColor(.white)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 50)
-                        .background(
-                            RoundedRectangle(cornerRadius: 16)
-                                .fill(.orangeAccent)
-                        )
-                    }
-                    .padding(.horizontal, 20)
-                    .padding(.bottom, 20)
+                    Spacer(minLength: 120)
                 }
                 .padding(.top, 10)
             }
@@ -105,6 +88,33 @@ struct RecipeDetailsView: View {
             .navigationTitle("Recipe")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar(.hidden, for: .tabBar)
+            .safeAreaInset(edge: .bottom) {
+                // Start Cooking Button
+                Button(action: {
+                    showingCookingWizard = true
+                }) {
+                    HStack {
+                        Image(systemName: "play.fill")
+                            .font(.headline)
+                        Text("Start Cooking")
+                            .font(.headline)
+                            .fontWeight(.semibold)
+                    }
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(.orangeAccent)
+                    .cornerRadius(12)
+                }
+                .padding(.horizontal)
+                .padding(.bottom, 8)
+                .background(.regularMaterial)
+            }
+            .fullScreenCover(isPresented: $showingCookingWizard) {
+                NavigationView {
+                    CookingWizardView(recipe: recipe)
+                }
+            }
         } else {
             // Fallback for nil recipe
             VStack(spacing: 20) {

@@ -8,6 +8,36 @@
 import Foundation
 import SwiftData
 
+// MARK: - Recipe Protocol for Unified Components
+
+/// Protocol that defines common properties for both Recipe and PremiumRecipe models
+/// This enables unified components to work with both types while preserving type-specific features
+protocol RecipeProtocol {
+    var name: String { get }
+    var servings: Int { get }
+    var prepTimeFormatted: String { get }
+    var cookTimeFormatted: String { get }
+    var restTimeFormatted: String { get }
+    var caloriesPerServing: Double { get }
+    var proteinPerServing: Double { get }
+    var carbsPerServing: Double { get }
+    var fatPerServing: Double { get }
+    var recipeIngredients: [any IngredientProtocol] { get }
+}
+
+/// Protocol for ingredient types to work with unified components
+protocol IngredientProtocol {
+    var ingredientId: String { get }
+    var name: String { get }
+    var servingSize: Double { get }
+    var unit: String { get }
+    var calories: Double { get }
+    var protein: Double { get }
+    var carbs: Double { get }
+    var fat: Double { get }
+    var servingSizeDescription: String { get }
+}
+
 // MARK: - Premium Recipe System
 
 /// Premium Recipe Model for JSON-based curated recipes
@@ -624,5 +654,31 @@ extension Step: Equatable {
 extension Ingredient: Equatable {
     static func == (lhs: Ingredient, rhs: Ingredient) -> Bool {
         lhs.id == rhs.id
+    }
+}
+
+// MARK: - Protocol Conformance
+
+extension Recipe: RecipeProtocol {
+    var recipeIngredients: [any IngredientProtocol] {
+        return self.ingredients.map { $0 as IngredientProtocol }
+    }
+}
+
+extension PremiumRecipe: RecipeProtocol {
+    var recipeIngredients: [any IngredientProtocol] {
+        return self.ingredients.map { $0 as IngredientProtocol }
+    }
+}
+
+extension Ingredient: IngredientProtocol {
+    var ingredientId: String {
+        return self.id.uuidString
+    }
+}
+
+extension PremiumIngredient: IngredientProtocol {
+    var ingredientId: String {
+        return self.id
     }
 }
