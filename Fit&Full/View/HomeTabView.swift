@@ -104,7 +104,7 @@ struct HomeTabView: View {
                                 )
                             }
                             .buttonStyle(PlainButtonStyle())
-                            .frame(width: 160) // Fixed width for horizontal scrolling
+                            .frame(width: 160, height: 160) // Fixed width for horizontal scrolling
                         }
                     }
                     .padding(.horizontal, 20)
