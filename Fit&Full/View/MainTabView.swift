@@ -39,9 +39,7 @@ struct MainTabView: View {
                         }
 
                     // Explore Tab
-                    ExploreView(backgroundColor: $backgroundColor,
-                                accentTextColor: $accentTextColor,
-                                accentColor: $accentColor)
+                    ExploreRecipesView()
                         .tabItem {
                             Image(systemName: "safari.fill")
                             Text("Explore")
@@ -80,7 +78,7 @@ struct MainTabView: View {
                 }
                 .hidden()
                 
-                NavigationLink(destination: CreateRecipeView(), isActive: $navigateToRecipe) {
+                NavigationLink(destination: RecipeCreationWizardView(), isActive: $navigateToRecipe) {
                     EmptyView()
                 }
                 .hidden()

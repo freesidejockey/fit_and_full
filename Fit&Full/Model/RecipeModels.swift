@@ -36,6 +36,15 @@ protocol IngredientProtocol {
     var carbs: Double { get }
     var fat: Double { get }
     var servingSizeDescription: String { get }
+    
+    // Enhanced macro tracking properties
+    var fiber: Double { get }
+    var sugar: Double { get }
+    var sodium: Double { get }
+    var cholesterol: Double { get }
+    var category: String { get }
+    var displayName: String { get }
+    var detailedNutritionSummary: String { get }
 }
 
 // MARK: - Premium Recipe System
@@ -116,7 +125,7 @@ struct PremiumRecipe: Codable, Identifiable {
     
     /// Convert to SwiftData Recipe for cooking wizard
     func toRecipe() -> Recipe {
-        let recipe = Recipe(name: name)
+        let recipe = Recipe(name: name, description: description, difficulty: difficulty, category: category)
         recipe.rating = rating
         recipe.servings = servings
         recipe.backgroundImageName = backgroundImageName
@@ -124,7 +133,7 @@ struct PremiumRecipe: Codable, Identifiable {
         recipe.cookTime = cookTime
         recipe.restTime = restTime
         
-        // Add ingredients
+        // Add ingredients with enhanced macro tracking
         for premiumIngredient in ingredients {
             let ingredient = Ingredient(
                 name: premiumIngredient.name,
@@ -133,7 +142,12 @@ struct PremiumRecipe: Codable, Identifiable {
                 calories: premiumIngredient.calories,
                 protein: premiumIngredient.protein,
                 carbs: premiumIngredient.carbs,
-                fat: premiumIngredient.fat
+                fat: premiumIngredient.fat,
+                fiber: premiumIngredient.fiber,
+                sugar: premiumIngredient.sugar,
+                sodium: premiumIngredient.sodium,
+                cholesterol: premiumIngredient.cholesterol,
+                category: premiumIngredient.category
             )
             recipe.addIngredient(ingredient)
         }
@@ -163,6 +177,30 @@ struct PremiumIngredient: Codable, Identifiable {
     let carbs: Double
     let fat: Double
     
+    // Enhanced macro tracking (with defaults for backward compatibility with existing JSON)
+    let fiber: Double
+    let sugar: Double
+    let sodium: Double
+    let cholesterol: Double
+    let category: String
+    
+    // Initialize with defaults for new properties to maintain JSON compatibility
+    init(id: String, name: String, servingSize: Double, unit: String, calories: Double, protein: Double, carbs: Double, fat: Double, fiber: Double = 0.0, sugar: Double = 0.0, sodium: Double = 0.0, cholesterol: Double = 0.0, category: String = "Other") {
+        self.id = id
+        self.name = name
+        self.servingSize = servingSize
+        self.unit = unit
+        self.calories = calories
+        self.protein = protein
+        self.carbs = carbs
+        self.fat = fat
+        self.fiber = fiber
+        self.sugar = sugar
+        self.sodium = sodium
+        self.cholesterol = cholesterol
+        self.category = category
+    }
+    
     /// Formatted serving size string for display
     var servingSizeDescription: String {
         let formatter = NumberFormatter()
@@ -173,9 +211,24 @@ struct PremiumIngredient: Codable, Identifiable {
         return "\(sizeString) \(unit)"
     }
     
-    /// Nutrition summary string for display
+    /// Basic nutrition summary string for display
     var nutritionSummary: String {
         return "Cal: \(Int(calories)), P: \(Int(protein))g, C: \(Int(carbs))g, F: \(Int(fat))g"
+    }
+    
+    /// Enhanced nutrition summary with additional macros
+    var detailedNutritionSummary: String {
+        var summary = nutritionSummary
+        if fiber > 0 { summary += ", Fiber: \(Int(fiber))g" }
+        if sugar > 0 { summary += ", Sugar: \(Int(sugar))g" }
+        if sodium > 0 { summary += ", Sodium: \(Int(sodium))mg" }
+        if cholesterol > 0 { summary += ", Chol: \(Int(cholesterol))mg" }
+        return summary
+    }
+    
+    /// Display name (same as name for premium ingredients)
+    var displayName: String {
+        return name
     }
 }
 
@@ -238,43 +291,28 @@ class PremiumRecipeLoader: ObservableObject {
     private func loadRecipesFromBundle() throws -> [PremiumRecipe] {
         var allRecipes: [PremiumRecipe] = []
         
-        // Get all JSON files from the PremiumRecipes bundle directory
-        guard let bundlePath = Bundle.main.path(forResource: "PremiumRecipes", ofType: nil),
-              let bundle = Bundle(path: bundlePath) else {
-            // Fallback: try to load from main bundle
-            return try loadRecipesFromMainBundle()
-        }
-        
-        let fileManager = FileManager.default
-        let contents = try fileManager.contentsOfDirectory(atPath: bundlePath)
-        let jsonFiles = contents.filter { $0.hasSuffix(".json") }
-        
-        for fileName in jsonFiles {
-            if let filePath = bundle.path(forResource: fileName.replacingOccurrences(of: ".json", with: ""), ofType: "json") {
-                let data = try Data(contentsOf: URL(fileURLWithPath: filePath))
-                let recipe = try JSONDecoder().decode(PremiumRecipe.self, from: data)
-                allRecipes.append(recipe)
-            }
-        }
-        
-        return allRecipes.sorted { $0.name < $1.name }
+        // Load directly from main bundle PremiumRecipes folder
+        // The files are located in the main bundle under PremiumRecipes directory
+        return try loadRecipesFromMainBundle()
     }
     
-    /// Fallback: Load recipes from main bundle
+    /// Load recipes from main bundle PremiumRecipes directory
     private func loadRecipesFromMainBundle() throws -> [PremiumRecipe] {
         var allRecipes: [PremiumRecipe] = []
         
-        // List of premium recipe file names
+        // List of premium recipe file names (updated to include all 6 files)
         let recipeFiles = [
             "gourmet_salmon_teriyaki",
             "artisan_sourdough_bread",
             "truffle_mushroom_risotto",
             "chocolate_lava_cake",
-            "mediterranean_quinoa_bowl"
+            "mediterranean_quinoa_bowl",
+            "spinach_artichoke_chicken_casserole"
         ]
         
         for fileName in recipeFiles {
-            if let url = Bundle.main.url(forResource: fileName, withExtension: "json") {
+            // Look for files in the PremiumRecipes subdirectory
+            if let url = Bundle.main.url(forResource: fileName, withExtension: "json", subdirectory: "PremiumRecipes") {
                 let data = try Data(contentsOf: url)
                 let recipe = try JSONDecoder().decode(PremiumRecipe.self, from: data)
                 allRecipes.append(recipe)
@@ -347,10 +385,23 @@ class Recipe {
     var servings: Int = 1
     var backgroundImageName: String?
     
+    // Enhanced recipe metadata for wizard flow
+    var recipeDescription: String = ""  // Detailed description for wizard introduction
+    var difficulty: String = "Easy"     // "Easy", "Medium", "Hard"
+    var category: String = "Main Dish"  // Recipe category for organization
+    var cuisine: String?                // Optional cuisine type (e.g., "Italian", "Mexican")
+    var tags: [String] = []            // Recipe tags for filtering (e.g., ["vegetarian", "gluten-free"])
+    
     // Timing information for recipe details
     var prepTime: TimeInterval? // in seconds
     var cookTime: TimeInterval? // in seconds
     var restTime: TimeInterval? // in seconds (for resting/cooling)
+    
+    // Wizard-specific properties
+    var lastCookedDate: Date?          // Track when recipe was last cooked
+    var cookingProgress: Double = 0.0  // Overall cooking progress (0.0 to 1.0)
+    var isFavorite: Bool = false       // User favorite status
+    var notes: String = ""             // User's personal notes about the recipe
     
     /// One-to-many relationship with ingredients
     @Relationship(deleteRule: .cascade, inverse: \Ingredient.recipe)
@@ -429,6 +480,19 @@ class Recipe {
         self.steps = []
     }
     
+    /// Enhanced initializer with wizard-friendly properties
+    init(name: String, description: String, difficulty: String = "Easy", category: String = "Main Dish", cuisine: String? = nil) {
+        self.id = UUID()
+        self.name = name
+        self.recipeDescription = description
+        self.difficulty = difficulty
+        self.category = category
+        self.cuisine = cuisine
+        self.createdDate = Date()
+        self.ingredients = []
+        self.steps = []
+    }
+    
     /// Convenience initializer with directions string (converts to steps)
     convenience init(name: String, directions: String) {
         self.init(name: name)
@@ -494,6 +558,149 @@ class Recipe {
     var nextIncompleteStep: Step? {
         orderedSteps.first { !$0.isCompleted }
     }
+    
+    /// Get ingredients for a specific step (wizard step-by-step ingredient entry)
+    func ingredientsForStep(_ stepNumber: Int) -> [Ingredient] {
+        return ingredients.filter { $0.addedInStep == stepNumber }
+    }
+    
+    /// Get all ingredients not assigned to any specific step
+    var unassignedIngredients: [Ingredient] {
+        return ingredients.filter { $0.addedInStep == nil }
+    }
+    
+    /// Get ingredients by category for organized display
+    func ingredientsByCategory() -> [String: [Ingredient]] {
+        return Dictionary(grouping: ingredients) { $0.category }
+    }
+    
+    /// Calculate cooking progress based on completed steps and ingredients
+    func updateCookingProgress() {
+        let totalSteps = steps.count
+        let completedSteps = steps.filter { $0.isCompleted }.count
+        let totalIngredients = ingredients.count
+        let completedIngredients = ingredients.filter { $0.isCompleted }.count
+        
+        if totalSteps == 0 && totalIngredients == 0 {
+            cookingProgress = 0.0
+        } else if totalSteps == 0 {
+            cookingProgress = totalIngredients > 0 ? Double(completedIngredients) / Double(totalIngredients) : 0.0
+        } else if totalIngredients == 0 {
+            cookingProgress = Double(completedSteps) / Double(totalSteps)
+        } else {
+            // Weight steps more heavily than ingredients (70/30 split)
+            let stepProgress = Double(completedSteps) / Double(totalSteps) * 0.7
+            let ingredientProgress = Double(completedIngredients) / Double(totalIngredients) * 0.3
+            cookingProgress = stepProgress + ingredientProgress
+        }
+    }
+    
+    /// Reset all cooking progress (for restarting recipe)
+    func resetCookingProgress() {
+        steps.forEach { $0.isCompleted = false }
+        ingredients.forEach { $0.resetCompletion() }
+        cookingProgress = 0.0
+        lastCookedDate = nil
+    }
+    
+    /// Mark recipe as completed
+    func markRecipeCompleted() {
+        steps.forEach { $0.isCompleted = true }
+        ingredients.forEach { $0.markCompleted() }
+        cookingProgress = 1.0
+        lastCookedDate = Date()
+    }
+    
+    /// Get estimated total time for recipe
+    var totalEstimatedTime: TimeInterval {
+        let prep = prepTime ?? 0
+        let cook = cookTime ?? 0
+        let rest = restTime ?? 0
+        return prep + cook + rest
+    }
+    
+    /// Get formatted total time
+    var totalTimeFormatted: String {
+        let totalMinutes = Int(totalEstimatedTime / 60)
+        if totalMinutes < 60 {
+            return "\(totalMinutes) min"
+        } else {
+            let hours = totalMinutes / 60
+            let minutes = totalMinutes % 60
+            return minutes > 0 ? "\(hours)h \(minutes)m" : "\(hours)h"
+        }
+    }
+    
+    /// Enhanced nutrition calculations including new macro fields
+    var totalFiber: Double {
+        ingredients.reduce(0) { $0 + $1.fiber }
+    }
+    
+    var totalSugar: Double {
+        ingredients.reduce(0) { $0 + $1.sugar }
+    }
+    
+    var totalSodium: Double {
+        ingredients.reduce(0) { $0 + $1.sodium }
+    }
+    
+    var totalCholesterol: Double {
+        ingredients.reduce(0) { $0 + $1.cholesterol }
+    }
+    
+    /// Per-serving enhanced nutrition calculations
+    var fiberPerServing: Double {
+        totalFiber / Double(servings)
+    }
+    
+    var sugarPerServing: Double {
+        totalSugar / Double(servings)
+    }
+    
+    var sodiumPerServing: Double {
+        totalSodium / Double(servings)
+    }
+    
+    var cholesterolPerServing: Double {
+        totalCholesterol / Double(servings)
+    }
+    
+    /// Comprehensive nutrition summary for wizard display
+    var detailedNutritionSummary: String {
+        let cal = Int(caloriesPerServing)
+        let prot = Int(proteinPerServing)
+        let carb = Int(carbsPerServing)
+        let fat = Int(fatPerServing)
+        let fib = Int(fiberPerServing)
+        let sug = Int(sugarPerServing)
+        let sod = Int(sodiumPerServing)
+        let chol = Int(cholesterolPerServing)
+        
+        var summary = "Per serving: \(cal) cal, \(prot)g protein, \(carb)g carbs, \(fat)g fat"
+        if fib > 0 { summary += ", \(fib)g fiber" }
+        if sug > 0 { summary += ", \(sug)g sugar" }
+        if sod > 0 { summary += ", \(sod)mg sodium" }
+        if chol > 0 { summary += ", \(chol)mg cholesterol" }
+        
+        return summary
+    }
+    
+    /// Add tag to recipe
+    func addTag(_ tag: String) {
+        if !tags.contains(tag) {
+            tags.append(tag)
+        }
+    }
+    
+    /// Remove tag from recipe
+    func removeTag(_ tag: String) {
+        tags.removeAll { $0 == tag }
+    }
+    
+    /// Check if recipe has specific tag
+    func hasTag(_ tag: String) -> Bool {
+        return tags.contains(tag)
+    }
 }
 
 /// Ingredient Model for individual recipe ingredients with nutrition data
@@ -510,10 +717,28 @@ class Ingredient {
     var carbs: Double    // in grams
     var fat: Double      // in grams
     
+    // Enhanced macro tracking for wizard interface
+    var fiber: Double = 0.0      // in grams
+    var sugar: Double = 0.0      // in grams
+    var sodium: Double = 0.0     // in milligrams
+    var cholesterol: Double = 0.0 // in milligrams
+    
+    // Additional ingredient metadata for wizard flow
+    var category: String = "Other"  // e.g., "Protein", "Vegetable", "Grain", "Dairy", "Fat", "Spice"
+    var brand: String?              // Optional brand name
+    var notes: String?              // Optional preparation notes or substitutions
+    var isOptional: Bool = false    // Whether this ingredient is optional in the recipe
+    var preparationMethod: String?  // e.g., "diced", "chopped", "minced", "whole"
+    
+    // Wizard-specific properties
+    var addedInStep: Int?          // Which step this ingredient is added (for step-by-step entry)
+    var isCompleted: Bool = false  // Whether this ingredient has been added during cooking
+    var lastModified: Date = Date() // Track when ingredient was last updated
+    
     /// Many-to-one relationship with recipe
     var recipe: Recipe?
     
-    /// Initialize a new ingredient
+    /// Initialize a new ingredient with basic nutrition data
     init(name: String, servingSize: Double, unit: String, calories: Double, protein: Double, carbs: Double, fat: Double) {
         self.id = UUID()
         self.name = name
@@ -523,6 +748,29 @@ class Ingredient {
         self.protein = protein
         self.carbs = carbs
         self.fat = fat
+        self.lastModified = Date()
+    }
+    
+    /// Enhanced initializer with full macro tracking
+    init(name: String, servingSize: Double, unit: String, calories: Double, protein: Double, carbs: Double, fat: Double, fiber: Double = 0.0, sugar: Double = 0.0, sodium: Double = 0.0, cholesterol: Double = 0.0, category: String = "Other", brand: String? = nil, notes: String? = nil, preparationMethod: String? = nil, addedInStep: Int? = nil) {
+        self.id = UUID()
+        self.name = name
+        self.servingSize = servingSize
+        self.unit = unit
+        self.calories = calories
+        self.protein = protein
+        self.carbs = carbs
+        self.fat = fat
+        self.fiber = fiber
+        self.sugar = sugar
+        self.sodium = sodium
+        self.cholesterol = cholesterol
+        self.category = category
+        self.brand = brand
+        self.notes = notes
+        self.preparationMethod = preparationMethod
+        self.addedInStep = addedInStep
+        self.lastModified = Date()
     }
     
     /// Formatted serving size string for display
@@ -539,6 +787,61 @@ class Ingredient {
     var nutritionSummary: String {
         return "Cal: \(Int(calories)), P: \(Int(protein))g, C: \(Int(carbs))g, F: \(Int(fat))g"
     }
+    
+    /// Enhanced nutrition summary with additional macros
+    var detailedNutritionSummary: String {
+        var summary = nutritionSummary
+        if fiber > 0 { summary += ", Fiber: \(Int(fiber))g" }
+        if sugar > 0 { summary += ", Sugar: \(Int(sugar))g" }
+        if sodium > 0 { summary += ", Sodium: \(Int(sodium))mg" }
+        if cholesterol > 0 { summary += ", Chol: \(Int(cholesterol))mg" }
+        return summary
+    }
+    
+    /// Display name with preparation method if available
+    var displayName: String {
+        if let prep = preparationMethod, !prep.isEmpty {
+            return "\(name) (\(prep))"
+        }
+        return name
+    }
+    
+    /// Full ingredient description for wizard display
+    var wizardDescription: String {
+        var description = "\(servingSizeDescription) \(displayName)"
+        if let brand = brand, !brand.isEmpty {
+            description += " - \(brand)"
+        }
+        if isOptional {
+            description += " (optional)"
+        }
+        return description
+    }
+    
+    /// Mark ingredient as completed during cooking
+    func markCompleted() {
+        isCompleted = true
+        lastModified = Date()
+    }
+    
+    /// Reset ingredient completion status
+    func resetCompletion() {
+        isCompleted = false
+        lastModified = Date()
+    }
+    
+    /// Update ingredient with new macro data
+    func updateMacros(calories: Double? = nil, protein: Double? = nil, carbs: Double? = nil, fat: Double? = nil, fiber: Double? = nil, sugar: Double? = nil, sodium: Double? = nil, cholesterol: Double? = nil) {
+        if let calories = calories { self.calories = calories }
+        if let protein = protein { self.protein = protein }
+        if let carbs = carbs { self.carbs = carbs }
+        if let fat = fat { self.fat = fat }
+        if let fiber = fiber { self.fiber = fiber }
+        if let sugar = sugar { self.sugar = sugar }
+        if let sodium = sodium { self.sodium = sodium }
+        if let cholesterol = cholesterol { self.cholesterol = cholesterol }
+        self.lastModified = Date()
+    }
 }
 
 // MARK: - Sample Data for Testing
@@ -546,20 +849,23 @@ class Ingredient {
 extension Recipe {
     /// Create sample recipes for testing and preview purposes
     static var sampleRecipes: [Recipe] {
-        // Protein Pancakes Recipe
-        let pancakes = Recipe(name: "Protein Pancakes")
+        // Protein Pancakes Recipe with enhanced metadata
+        let pancakes = Recipe(name: "Protein Pancakes", description: "Fluffy, high-protein pancakes perfect for a post-workout breakfast. These pancakes combine the wholesome goodness of oat flour with protein powder for a nutritious start to your day.", difficulty: "Easy", category: "Breakfast", cuisine: "American")
         pancakes.rating = 4.5
         pancakes.servings = 2
         pancakes.backgroundImageName = "pancakes_placeholder"
         pancakes.prepTime = 300 // 5 minutes
         pancakes.cookTime = 600 // 10 minutes
         pancakes.restTime = 120 // 2 minutes
+        pancakes.addTag("high-protein")
+        pancakes.addTag("breakfast")
+        pancakes.addTag("quick")
         
-        // Add ingredients
-        let flour = Ingredient(name: "Oat Flour", servingSize: 50, unit: "grams", calories: 190, protein: 7, carbs: 32, fat: 3)
-        let protein = Ingredient(name: "Whey Protein", servingSize: 30, unit: "grams", calories: 120, protein: 25, carbs: 2, fat: 1)
-        let banana = Ingredient(name: "Banana", servingSize: 1, unit: "medium", calories: 105, protein: 1, carbs: 27, fat: 0)
-        let egg = Ingredient(name: "Egg", servingSize: 1, unit: "large", calories: 70, protein: 6, carbs: 1, fat: 5)
+        // Add ingredients with enhanced macro tracking
+        let flour = Ingredient(name: "Oat Flour", servingSize: 50, unit: "grams", calories: 190, protein: 7, carbs: 32, fat: 3, fiber: 4.0, sugar: 1.0, sodium: 2.0, cholesterol: 0.0, category: "Grain", preparationMethod: "sifted", addedInStep: 1)
+        let protein = Ingredient(name: "Whey Protein", servingSize: 30, unit: "grams", calories: 120, protein: 25, carbs: 2, fat: 1, fiber: 0.0, sugar: 1.0, sodium: 50.0, cholesterol: 5.0, category: "Protein", brand: "Premium Whey", addedInStep: 1)
+        let banana = Ingredient(name: "Banana", servingSize: 1, unit: "medium", calories: 105, protein: 1, carbs: 27, fat: 0, fiber: 3.0, sugar: 14.0, sodium: 1.0, cholesterol: 0.0, category: "Fruit", preparationMethod: "mashed", addedInStep: 2)
+        let egg = Ingredient(name: "Egg", servingSize: 1, unit: "large", calories: 70, protein: 6, carbs: 1, fat: 5, fiber: 0.0, sugar: 0.5, sodium: 70.0, cholesterol: 186.0, category: "Protein", preparationMethod: "beaten", addedInStep: 2)
         
         pancakes.addIngredient(flour)
         pancakes.addIngredient(protein)
@@ -577,19 +883,23 @@ extension Recipe {
         pancakes.addStep(step3)
         pancakes.addStep(step4)
         
-        // Green Smoothie Recipe
-        let smoothie = Recipe(name: "Green Smoothie")
+        // Green Smoothie Recipe with enhanced metadata
+        let smoothie = Recipe(name: "Green Smoothie", description: "A refreshing and nutritious green smoothie packed with vitamins and minerals. This quick blend combines leafy greens with sweet fruit for a perfect balance of health and taste.", difficulty: "Easy", category: "Beverage", cuisine: "Health Food")
         smoothie.rating = 4.2
         smoothie.servings = 1
         smoothie.backgroundImageName = "smoothie_placeholder"
         smoothie.prepTime = 180 // 3 minutes
         smoothie.cookTime = 0 // No cooking required
         smoothie.restTime = 0 // No resting required
+        smoothie.addTag("healthy")
+        smoothie.addTag("vegetarian")
+        smoothie.addTag("quick")
+        smoothie.addTag("no-cook")
         
-        // Add ingredients
-        let spinach = Ingredient(name: "Spinach", servingSize: 100, unit: "grams", calories: 23, protein: 3, carbs: 4, fat: 0)
-        let apple = Ingredient(name: "Apple", servingSize: 1, unit: "medium", calories: 95, protein: 0, carbs: 25, fat: 0)
-        let almondMilk = Ingredient(name: "Almond Milk", servingSize: 250, unit: "ml", calories: 40, protein: 1, carbs: 2, fat: 3)
+        // Add ingredients with enhanced macro tracking
+        let spinach = Ingredient(name: "Spinach", servingSize: 100, unit: "grams", calories: 23, protein: 3, carbs: 4, fat: 0, fiber: 2.2, sugar: 0.4, sodium: 79.0, cholesterol: 0.0, category: "Vegetable", preparationMethod: "fresh", addedInStep: 1)
+        let apple = Ingredient(name: "Apple", servingSize: 1, unit: "medium", calories: 95, protein: 0, carbs: 25, fat: 0, fiber: 4.0, sugar: 19.0, sodium: 2.0, cholesterol: 0.0, category: "Fruit", preparationMethod: "cored", addedInStep: 1)
+        let almondMilk = Ingredient(name: "Almond Milk", servingSize: 250, unit: "ml", calories: 40, protein: 1, carbs: 2, fat: 3, fiber: 0.5, sugar: 0.0, sodium: 150.0, cholesterol: 0.0, category: "Dairy Alternative", brand: "Unsweetened", addedInStep: 1)
         
         smoothie.addIngredient(spinach)
         smoothie.addIngredient(apple)
@@ -604,19 +914,23 @@ extension Recipe {
         smoothie.addStep(smoothieStep2)
         smoothie.addStep(smoothieStep3)
         
-        // Breakfast Casserole Recipe
-        let casserole = Recipe(name: "Breakfast Casserole")
+        // Breakfast Casserole Recipe with enhanced metadata
+        let casserole = Recipe(name: "Breakfast Casserole", description: "A hearty, make-ahead breakfast casserole that's perfect for feeding a crowd. This protein-rich dish combines eggs, cheese, and bread for a satisfying morning meal that can be prepared the night before.", difficulty: "Medium", category: "Breakfast", cuisine: "American")
         casserole.rating = 4.2
         casserole.servings = 6
         casserole.backgroundImageName = "casserole_placeholder"
         casserole.prepTime = 900 // 15 minutes
         casserole.cookTime = 2700 // 45 minutes
         casserole.restTime = 300 // 5 minutes
+        casserole.addTag("make-ahead")
+        casserole.addTag("family-friendly")
+        casserole.addTag("high-protein")
+        casserole.addTag("comfort-food")
         
-        // Add ingredients
-        let eggs = Ingredient(name: "Eggs", servingSize: 6, unit: "large", calories: 420, protein: 36, carbs: 6, fat: 30)
-        let cheese = Ingredient(name: "Cheddar Cheese", servingSize: 100, unit: "grams", calories: 400, protein: 25, carbs: 1, fat: 33)
-        let bread = Ingredient(name: "Whole Wheat Bread", servingSize: 4, unit: "slices", calories: 320, protein: 12, carbs: 60, fat: 4)
+        // Add ingredients with enhanced macro tracking
+        let eggs = Ingredient(name: "Eggs", servingSize: 6, unit: "large", calories: 420, protein: 36, carbs: 6, fat: 30, fiber: 0.0, sugar: 3.0, sodium: 420.0, cholesterol: 1116.0, category: "Protein", preparationMethod: "beaten", addedInStep: 2)
+        let cheese = Ingredient(name: "Cheddar Cheese", servingSize: 100, unit: "grams", calories: 400, protein: 25, carbs: 1, fat: 33, fiber: 0.0, sugar: 0.5, sodium: 621.0, cholesterol: 105.0, category: "Dairy", preparationMethod: "shredded", addedInStep: 2)
+        let bread = Ingredient(name: "Whole Wheat Bread", servingSize: 4, unit: "slices", calories: 320, protein: 12, carbs: 60, fat: 4, fiber: 8.0, sugar: 6.0, sodium: 640.0, cholesterol: 0.0, category: "Grain", preparationMethod: "cubed", addedInStep: 1)
         
         casserole.addIngredient(eggs)
         casserole.addIngredient(cheese)

@@ -54,7 +54,7 @@ struct YourRecipesView: View {
                                 .opacity(0.8)
                                 .multilineTextAlignment(.center)
                         
-                        NavigationLink(destination: CreateRecipeView()) {
+                        NavigationLink(destination: RecipeCreationWizardView()) {
                             HStack {
                                 Image(systemName: "plus")
                                     .font(.system(size: 16, weight: .medium))
@@ -93,7 +93,7 @@ struct YourRecipesView: View {
                             }
                             
                             // Add new recipe placeholder
-                            NavigationLink(destination: CreateRecipeView()) {
+                            NavigationLink(destination: RecipeCreationWizardView()) {
                                 VStack(alignment: .leading, spacing: 8) {
                                     Text("Add New Recipe")
                                         .font(.headline)
