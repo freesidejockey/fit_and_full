@@ -64,6 +64,7 @@ struct CookingWizardView: View {
                                 .padding(.horizontal, 20)
                             
                             Button("Finish Cooking") {
+                                recipe.resetCookingProgress()
                                 dismiss()
                             }
                             .font(.headline)
@@ -107,6 +108,7 @@ struct CookingWizardView: View {
             titleVisibility: .visible
         ) {
             Button("Exit Cooking", role: .destructive) {
+                recipe.resetCookingProgress()
                 dismiss()
             }
             Button("Continue Cooking", role: .cancel) { }

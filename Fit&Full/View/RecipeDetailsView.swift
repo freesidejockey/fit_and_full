@@ -6,12 +6,16 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct RecipeDetailsView: View {
     let recipe: Recipe?
     @State private var isFavorite: Bool = false
     @State private var showingCookingWizard = false
+    @State private var showingEditView = false
+    @State private var showingDeleteAlert = false
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
     
     var body: some View {
         if let recipe = recipe {
@@ -27,7 +31,7 @@ struct RecipeDetailsView: View {
                             .padding(.horizontal, 20)
                         
                         // Action Buttons
-                        HStack(spacing: 20) {
+                        HStack(spacing: 16) {
                             // Favorite Button
                             Button(action: {
                                 isFavorite.toggle()
@@ -35,9 +39,11 @@ struct RecipeDetailsView: View {
                             }) {
                                 HStack(spacing: 8) {
                                     Image(systemName: isFavorite ? "heart.fill" : "heart")
-                                        .font(.system(size: 16, weight: .medium))
+                                        .font(.headline)
+                                        .fontWeight(.semibold)
                                     Text(isFavorite ? "Favorited" : "Favorite")
-                                        .font(.system(size: 16, weight: .medium))
+                                        .font(.headline)
+                                        .fontWeight(.semibold)
                                 }
                                 .foregroundColor(isFavorite ? .red : .primary)
                                 .padding(.horizontal, 16)
@@ -50,16 +56,38 @@ struct RecipeDetailsView: View {
                             
                             // Edit Button
                             Button(action: {
-                                // TODO: Navigate to edit recipe
-                                print("Edit recipe tapped")
+                                showingEditView = true
                             }) {
                                 HStack(spacing: 8) {
                                     Image(systemName: "pencil")
-                                        .font(.system(size: 16, weight: .medium))
+                                        .font(.headline)
+                                        .fontWeight(.semibold)
                                     Text("Edit")
-                                        .font(.system(size: 16, weight: .medium))
+                                        .font(.headline)
+                                        .fontWeight(.semibold)
                                 }
                                 .foregroundColor(.primary)
+                                .padding(.horizontal, 16)
+                                .padding(.vertical, 8)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 8)
+                                        .stroke(Color(.systemGray4), lineWidth: 1)
+                                )
+                            }
+                            
+                            // Delete Button
+                            Button(action: {
+                                showingDeleteAlert = true
+                            }) {
+                                HStack(spacing: 8) {
+                                    Image(systemName: "trash")
+                                        .font(.headline)
+                                        .fontWeight(.semibold)
+                                    Text("Delete")
+                                        .font(.headline)
+                                        .fontWeight(.semibold)
+                                }
+                                .foregroundColor(.red)
                                 .padding(.horizontal, 16)
                                 .padding(.vertical, 8)
                                 .background(
@@ -115,6 +143,19 @@ struct RecipeDetailsView: View {
                     CookingWizardView(recipe: recipe)
                 }
             }
+            .sheet(isPresented: $showingEditView) {
+                NavigationView {
+                    RecipeCreationWizardView(recipe: recipe)
+                }
+            }
+            .alert("Delete Recipe", isPresented: $showingDeleteAlert) {
+                Button("Cancel", role: .cancel) { }
+                Button("Delete", role: .destructive) {
+                    deleteRecipe()
+                }
+            } message: {
+                Text("Are you sure you want to delete this recipe? This action cannot be undone.")
+            }
         } else {
             // Fallback for nil recipe
             VStack(spacing: 20) {
@@ -146,6 +187,19 @@ struct RecipeDetailsView: View {
             .navigationTitle("Recipe")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar(.hidden, for: .tabBar)
+        }
+    }
+    
+    // MARK: - Delete Functionality
+    private func deleteRecipe() {
+        guard let recipe = recipe else { return }
+        
+        do {
+            modelContext.delete(recipe)
+            try modelContext.save()
+            dismiss()
+        } catch {
+            print("Failed to delete recipe: \(error)")
         }
     }
 }

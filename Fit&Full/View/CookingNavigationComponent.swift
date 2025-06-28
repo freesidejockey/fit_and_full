@@ -37,7 +37,11 @@ struct CookingNavigationComponent: View {
     }
     
     private var canGoNext: Bool {
-        currentStepIndex < totalSteps - 1
+        currentStepIndex < totalSteps
+    }
+    
+    private var isLastStep: Bool {
+        currentStepIndex == totalSteps - 1
     }
     
     var body: some View {
@@ -140,10 +144,20 @@ struct CookingNavigationComponent: View {
                 }
                 .disabled(!canGoPrevious)
                 
-                // Next button
+                // Next/Finish button
                 Button(action: {
                     withAnimation(.easeInOut(duration: 0.3)) {
-                        currentStepIndex = min(totalSteps - 1, currentStepIndex + 1)
+                        // Mark current step as completed before advancing
+                        if currentStepIndex < orderedSteps.count {
+                            orderedSteps[currentStepIndex].isCompleted = true
+                        }
+                        
+                        if isLastStep {
+                            // Advance past the last step to trigger completion screen
+                            currentStepIndex = totalSteps
+                        } else {
+                            currentStepIndex = min(totalSteps - 1, currentStepIndex + 1)
+                        }
                     }
                 }) {
                     HStack(spacing: 8) {
@@ -157,7 +171,8 @@ struct CookingNavigationComponent: View {
                     .frame(height: 48)
                     .background(
                         RoundedRectangle(cornerRadius: 14)
-                            .fill(canGoNext ? .orangeAccent : Color(.systemGray5))
+                            .fill(canGoNext ? .orangeAccent : .white)
+                            .stroke(canGoNext ? .white: Color(.systemGray4), lineWidth: 2)
                     )
                 }
                 .disabled(!canGoNext)

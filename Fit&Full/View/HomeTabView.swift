@@ -6,13 +6,18 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct HomeTabView: View {
     @Binding var backgroundColor: Color
     @Binding var accentTextColor: Color
     @Binding var accentColor: Color
     
-    // Sample recipes for display
+    // SwiftData integration
+    @Query(sort: \Recipe.createdDate, order: .reverse) private var recipes: [Recipe]
+    @Environment(\.modelContext) private var modelContext
+    
+    // Sample recipes for explore section
     private let sampleRecipes = Recipe.sampleRecipes
 
     var body: some View {
@@ -28,9 +33,11 @@ struct HomeTabView: View {
                         Spacer(minLength: 100) // Extra space for tab bar
                     }
                     .padding(.horizontal, 20)
-                    .padding(.top, 20)
+                    .padding(.top, 10) // Reduced from 20 to 5
                 }
             }
+            .navigationTitle("Fit & Full")
+            .navigationBarTitleDisplayMode(.inline)
         }
         .onAppear {
             // Update your bindings here
@@ -60,15 +67,47 @@ struct HomeTabView: View {
     }
     
     private var yourRecipesGrid: some View {
-        let columns = Array(repeating: GridItem(.flexible(), spacing: 15), count: 2)
-        
-        return LazyVGrid(columns: columns, spacing: 15) {
-            ForEach(0..<min(4, sampleRecipes.count), id: \.self) { index in
-                NavigationLink(destination: RecipeDetailsView(recipe: sampleRecipes[index])) {
-                    RecipePreviewComponent(
-                        recipe: sampleRecipes[index],
-                        backgroundColor: index % 2 == 0 ? .tealLightBackground : .purpleLightBackground
-                    )
+        Group {
+            if recipes.isEmpty {
+                // Empty state - Create Your First Recipe card
+                NavigationLink(destination: RecipeCreationWizardView()) {
+                    VStack(spacing: 12) {
+                        Image(systemName: "plus.circle.fill")
+                            .font(.system(size: 40))
+                            .foregroundColor(.orangeAccent)
+                        
+                        Text("Create Your First Recipe")
+                            .font(.headline)
+                            .fontWeight(.semibold)
+                            .foregroundColor(.black)
+                        
+                        Text("Start building your recipe collection")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                            .multilineTextAlignment(.center)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 120)
+                    .background(.tealLightBackground)
+                    .cornerRadius(12)
+                }
+                .buttonStyle(PlainButtonStyle())
+            } else {
+                // Horizontal scrolling view of actual SwiftData recipes
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 15) {
+                        ForEach(Array(recipes.prefix(6).enumerated()), id: \.element.id) { index, recipe in
+                            NavigationLink(destination: RecipeDetailsView(recipe: recipe)) {
+                                RecipePreviewComponent(
+                                    recipe: recipe,
+                                    backgroundColor: index % 2 == 0 ? .tealLightBackground : .purpleLightBackground
+                                )
+                            }
+                            .buttonStyle(PlainButtonStyle())
+                            .frame(width: 160) // Fixed width for horizontal scrolling
+                        }
+                    }
+                    .padding(.horizontal, 20)
                 }
             }
         }

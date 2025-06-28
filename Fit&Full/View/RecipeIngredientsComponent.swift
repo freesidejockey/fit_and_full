@@ -96,26 +96,26 @@ struct RecipeIngredientsComponent: View {
                     .fill(Color(.systemGray6))
             )
             
-            // Add to Grocery List button
-            Button(action: {
-                // TODO: Implement grocery list functionality
-                print("Add to grocery list tapped")
-            }) {
-                HStack {
-                    Image(systemName: "cart.badge.plus")
-                        .font(.system(size: 16, weight: .medium))
+            // // Add to Grocery List button
+            // Button(action: {
+            //     // TODO: Implement grocery list functionality
+            //     print("Add to grocery list tapped")
+            // }) {
+            //     HStack {
+            //         Image(systemName: "cart.badge.plus")
+            //             .font(.system(size: 16, weight: .medium))
                     
-                    Text("Add to Grocery List")
-                        .font(.system(size: 16, weight: .semibold))
-                }
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity)
-                .frame(height: 44)
-                .background(
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(.tealAccent)
-                )
-            }
+            //         Text("Add to Grocery List")
+            //             .font(.system(size: 16, weight: .semibold))
+            //     }
+            //     .foregroundColor(.white)
+            //     .frame(maxWidth: .infinity)
+            //     .frame(height: 44)
+            //     .background(
+            //         RoundedRectangle(cornerRadius: 12)
+            //             .fill(.tealAccent)
+            //     )
+            // }
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 16)
