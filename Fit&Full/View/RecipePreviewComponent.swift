@@ -60,7 +60,7 @@ struct RecipePreviewComponent: View {
                 placeholderContent
             }
         }
-        .frame(width: 140, height: 140)
+        .frame(width: 160, height: 100)
         .shadow(color: Color.black.opacity(0.1), radius: 4, x: 0, y: 2)
     }
     

@@ -874,3 +874,32 @@ The component provides a comprehensive solution for ingredient data entry that s
 - All recipe cards are clickable and navigate to RecipeDetailsView
 - Section integrates seamlessly with existing layout and navigation patterns
 - Ready for testing and user interaction
+
+[2025-06-28 13:03:54] - HomeTabView Automatic Sample Recipe Population Implementation Completed
+
+## Completed Tasks
+
+- **SwiftData Auto-Population Feature**: Added automatic sample recipe loading to HomeTabView.swift when the database is empty
+  - **onAppear Enhancement**: Modified existing onAppear modifier to call `loadSampleRecipesIfNeeded()` function
+  - **Database Check Logic**: Implemented check using `recipes.isEmpty` to only populate when no recipes exist
+  - **Sample Recipe Insertion**: Added all sample recipes from `Recipe.sampleRecipes` to SwiftData context using `modelContext.insert()`
+  - **Error Handling**: Included proper try-catch error handling for SwiftData operations
+  - **Context Persistence**: Added `modelContext.save()` to ensure changes persist to database
+  - **One-Time Population**: Ensures sample recipes are only added once when database is empty, preventing duplicates
+  - **User Experience**: "Your Recipes" section will now show actual recipes instead of empty state on first app launch
+
+## Technical Implementation
+
+- **Function**: `loadSampleRecipesIfNeeded()` - Private function that checks database state and populates if needed
+- **Integration**: Seamlessly integrated with existing onAppear modifier without disrupting color scheme bindings
+- **Sample Data**: Uses existing `Recipe.sampleRecipes` which includes 3 comprehensive recipes (Protein Pancakes, Green Smoothie, Breakfast Casserole)
+- **SwiftData Integration**: Proper use of `@Query` and `@Environment(\.modelContext)` for database operations
+- **Logging**: Added console logging for successful population and error cases
+
+## Current Status
+
+- Automatic sample recipe population fully implemented and integrated
+- Users will see populated "Your Recipes" section on first app launch instead of empty state
+- Sample recipes persist in SwiftData like user-created recipes
+- All existing functionality preserved including navigation and styling
+- Ready for testing and user interaction

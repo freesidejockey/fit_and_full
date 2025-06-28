@@ -27,13 +27,13 @@ struct HomeTabView: View {
                     .ignoresSafeArea(.container, edges: .top)
 
                 ScrollView {
-                    VStack(alignment: .leading, spacing: 30) {
+                    VStack(alignment: .leading, spacing: 0) {
                         yourRecipesSection
                         exploreRecipesSection
                         Spacer(minLength: 100) // Extra space for tab bar
                     }
-                    .padding(.horizontal, 20)
-                    .padding(.top, 10) // Reduced from 20 to 5
+                    .padding(.horizontal, 10)
+                    .padding(.top, 0) // Reduced from 20 to 5
                 }
             }
             .navigationTitle("Fit & Full")
@@ -149,8 +149,32 @@ struct HomeTabView: View {
     }
 }
 
-#Preview {
-    HomeTabView(backgroundColor: .constant(.orangeSlightlyDarker),
-                accentTextColor: .constant(.orangeSlightlyDarker),
-                accentColor: .constant(.orangeAccent))
+#Preview("With Sample Data") {
+    let config = ModelConfiguration(isStoredInMemoryOnly: true)
+    let container = try! ModelContainer(for: Recipe.self, configurations: config)
+    
+    // Add sample data to the preview container
+    let sampleRecipes = Recipe.sampleRecipes
+    for recipe in sampleRecipes.prefix(3) { // Add first 3 sample recipes
+        container.mainContext.insert(recipe)
+    }
+    
+    return HomeTabView(
+        backgroundColor: .constant(.orangeSlightlyDarker),
+        accentTextColor: .constant(.orangeSlightlyDarker),
+        accentColor: .constant(.orangeAccent)
+    )
+    .modelContainer(container)
+}
+
+#Preview("Empty State") {
+    let config = ModelConfiguration(isStoredInMemoryOnly: true)
+    let container = try! ModelContainer(for: Recipe.self, configurations: config)
+    
+    return HomeTabView(
+        backgroundColor: .constant(.orangeSlightlyDarker),
+        accentTextColor: .constant(.orangeSlightlyDarker),
+        accentColor: .constant(.orangeAccent)
+    )
+    .modelContainer(container)
 }
