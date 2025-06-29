@@ -20,7 +20,12 @@
       "calories": 231,
       "protein": 31,
       "carbs": 0,
-      "fat": 11
+      "fat": 11,
+      "fiber": 0.0,
+      "sugar": 0.0,
+      "sodium": 90.0,
+      "cholesterol": 94.0,
+      "category": "Protein"
     },
     {
       "id": "ING-002",
@@ -30,7 +35,12 @@
       "calories": 35,
       "protein": 5,
       "carbs": 3,
-      "fat": 0
+      "fat": 0,
+      "fiber": 0.5,
+      "sugar": 0.4,
+      "sodium": 5493.0,
+      "cholesterol": 0.0,
+      "category": "Spice"
     },
     {
       "id": "ING-003",
@@ -40,7 +50,12 @@
       "calories": 54,
       "protein": 0,
       "carbs": 12,
-      "fat": 0
+      "fat": 0,
+      "fiber": 0.0,
+      "sugar": 12.0,
+      "sodium": 252.0,
+      "cholesterol": 0.0,
+      "category": "Other"
     },
     {
       "id": "ING-004",
@@ -50,7 +65,12 @@
       "calories": 112,
       "protein": 0,
       "carbs": 29,
-      "fat": 0
+      "fat": 0,
+      "fiber": 0.0,
+      "sugar": 29.0,
+      "sodium": 12.0,
+      "cholesterol": 0.0,
+      "category": "Other"
     },
     {
       "id": "ING-005",
@@ -60,7 +80,12 @@
       "calories": 12,
       "protein": 0,
       "carbs": 3,
-      "fat": 0
+      "fat": 0,
+      "fiber": 0.3,
+      "sugar": 0.2,
+      "sodium": 2.0,
+      "cholesterol": 0.0,
+      "category": "Spice"
     },
     {
       "id": "ING-006",
@@ -70,7 +95,12 @@
       "calories": 15,
       "protein": 1,
       "carbs": 3,
-      "fat": 0
+      "fat": 0,
+      "fiber": 0.2,
+      "sugar": 0.1,
+      "sodium": 2.0,
+      "cholesterol": 0.0,
+      "category": "Spice"
     },
     {
       "id": "ING-007",
@@ -80,7 +110,12 @@
       "calories": 88,
       "protein": 0,
       "carbs": 0,
-      "fat": 10
+      "fat": 10,
+      "fiber": 0.0,
+      "sugar": 0.0,
+      "sodium": 0.0,
+      "cholesterol": 0.0,
+      "category": "Fat"
     },
     {
       "id": "ING-008",
@@ -90,7 +125,12 @@
       "calories": 6,
       "protein": 0,
       "carbs": 1,
-      "fat": 0
+      "fat": 0,
+      "fiber": 0.5,
+      "sugar": 0.5,
+      "sodium": 3.0,
+      "cholesterol": 0.0,
+      "category": "Vegetable"
     }
   ],
   "steps": [

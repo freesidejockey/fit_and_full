@@ -20,7 +20,12 @@
       "calories": 598,
       "protein": 8,
       "carbs": 46,
-      "fat": 43
+      "fat": 43,
+      "fiber": 12.0,
+      "sugar": 24.0,
+      "sodium": 20.0,
+      "cholesterol": 2.0,
+      "category": "Other"
     },
     {
       "id": "ING-024",
@@ -30,7 +35,12 @@
       "calories": 862,
       "protein": 1,
       "carbs": 1,
-      "fat": 98
+      "fat": 98,
+      "fiber": 0.0,
+      "sugar": 0.1,
+      "sodium": 11.0,
+      "cholesterol": 244.0,
+      "category": "Fat"
     },
     {
       "id": "ING-025",
@@ -40,7 +50,12 @@
       "calories": 140,
       "protein": 12,
       "carbs": 2,
-      "fat": 10
+      "fat": 10,
+      "fiber": 0.0,
+      "sugar": 1.0,
+      "sodium": 140.0,
+      "cholesterol": 372.0,
+      "category": "Protein"
     },
     {
       "id": "ING-026",
@@ -50,7 +65,12 @@
       "calories": 110,
       "protein": 5,
       "carbs": 1,
-      "fat": 9
+      "fat": 9,
+      "fiber": 0.0,
+      "sugar": 0.1,
+      "sodium": 16.0,
+      "cholesterol": 372.0,
+      "category": "Protein"
     },
     {
       "id": "ING-027",
@@ -60,7 +80,12 @@
       "calories": 240,
       "protein": 0,
       "carbs": 60,
-      "fat": 0
+      "fat": 0,
+      "fiber": 0.0,
+      "sugar": 60.0,
+      "sodium": 1.0,
+      "cholesterol": 0.0,
+      "category": "Other"
     },
     {
       "id": "ING-028",
@@ -70,7 +95,12 @@
       "calories": 109,
       "protein": 3,
       "carbs": 23,
-      "fat": 0
+      "fat": 0,
+      "fiber": 0.8,
+      "sugar": 0.1,
+      "sodium": 1.0,
+      "cholesterol": 0.0,
+      "category": "Grain"
     },
     {
       "id": "ING-029",
@@ -80,7 +110,12 @@
       "calories": 12,
       "protein": 0,
       "carbs": 1,
-      "fat": 0
+      "fat": 0,
+      "fiber": 0.0,
+      "sugar": 1.0,
+      "sodium": 1.0,
+      "cholesterol": 0.0,
+      "category": "Spice"
     },
     {
       "id": "ING-030",
@@ -90,7 +125,12 @@
       "calories": 0,
       "protein": 0,
       "carbs": 0,
-      "fat": 0
+      "fat": 0,
+      "fiber": 0.0,
+      "sugar": 0.0,
+      "sodium": 390.0,
+      "cholesterol": 0.0,
+      "category": "Spice"
     }
   ],
   "steps": [

@@ -20,7 +20,12 @@
       "calories": 716,
       "protein": 26,
       "carbs": 130,
-      "fat": 12
+      "fat": 12,
+      "fiber": 14.0,
+      "sugar": 0.0,
+      "sodium": 10.0,
+      "cholesterol": 0.0,
+      "category": "Grain"
     },
     {
       "id": "ING-032",
@@ -30,7 +35,12 @@
       "calories": 54,
       "protein": 3,
       "carbs": 12,
-      "fat": 1
+      "fat": 1,
+      "fiber": 3.6,
+      "sugar": 7.8,
+      "sodium": 15.0,
+      "cholesterol": 0.0,
+      "category": "Vegetable"
     },
     {
       "id": "ING-033",
@@ -40,7 +50,12 @@
       "calories": 32,
       "protein": 1,
       "carbs": 8,
-      "fat": 0
+      "fat": 0,
+      "fiber": 1.0,
+      "sugar": 3.4,
+      "sodium": 4.0,
+      "cholesterol": 0.0,
+      "category": "Vegetable"
     },
     {
       "id": "ING-034",
@@ -50,7 +65,12 @@
       "calories": 46,
       "protein": 1,
       "carbs": 11,
-      "fat": 0
+      "fat": 0,
+      "fiber": 3.7,
+      "sugar": 7.3,
+      "sodium": 6.0,
+      "cholesterol": 0.0,
+      "category": "Vegetable"
     },
     {
       "id": "ING-035",
@@ -60,7 +80,12 @@
       "calories": 40,
       "protein": 1,
       "carbs": 9,
-      "fat": 0
+      "fat": 0,
+      "fiber": 1.7,
+      "sugar": 4.2,
+      "sodium": 4.0,
+      "cholesterol": 0.0,
+      "category": "Vegetable"
     },
     {
       "id": "ING-036",
@@ -70,7 +95,12 @@
       "calories": 318,
       "protein": 17,
       "carbs": 5,
-      "fat": 26
+      "fat": 26,
+      "fiber": 0.0,
+      "sugar": 4.8,
+      "sodium": 1674.0,
+      "cholesterol": 107.0,
+      "category": "Dairy"
     },
     {
       "id": "ING-037",
@@ -80,7 +110,12 @@
       "calories": 115,
       "protein": 1,
       "carbs": 6,
-      "fat": 11
+      "fat": 11,
+      "fiber": 2.0,
+      "sugar": 0.5,
+      "sodium": 735.0,
+      "cholesterol": 0.0,
+      "category": "Fat"
     },
     {
       "id": "ING-038",
@@ -90,7 +125,12 @@
       "calories": 405,
       "protein": 0,
       "carbs": 0,
-      "fat": 45
+      "fat": 45,
+      "fiber": 0.0,
+      "sugar": 0.0,
+      "sodium": 1.0,
+      "cholesterol": 0.0,
+      "category": "Fat"
     },
     {
       "id": "ING-039",
@@ -100,7 +140,12 @@
       "calories": 7,
       "protein": 0,
       "carbs": 2,
-      "fat": 0
+      "fat": 0,
+      "fiber": 0.1,
+      "sugar": 0.5,
+      "sodium": 1.0,
+      "cholesterol": 0.0,
+      "category": "Fruit"
     },
     {
       "id": "ING-040",
@@ -110,7 +155,12 @@
       "calories": 3,
       "protein": 0,
       "carbs": 1,
-      "fat": 0
+      "fat": 0,
+      "fiber": 0.4,
+      "sugar": 0.0,
+      "sodium": 0.0,
+      "cholesterol": 0.0,
+      "category": "Spice"
     },
     {
       "id": "ING-041",
@@ -120,7 +170,12 @@
       "calories": 5,
       "protein": 0,
       "carbs": 1,
-      "fat": 0
+      "fat": 0,
+      "fiber": 0.5,
+      "sugar": 0.1,
+      "sodium": 8.0,
+      "cholesterol": 0.0,
+      "category": "Spice"
     }
   ],
   "steps": [

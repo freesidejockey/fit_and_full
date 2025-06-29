@@ -20,7 +20,12 @@
       "calories": 264,
       "protein": 8,
       "carbs": 56,
-      "fat": 1
+      "fat": 1,
+      "fiber": 2.0,
+      "sugar": 1.0,
+      "sodium": 5.0,
+      "cholesterol": 0.0,
+      "category": "Grain"
     },
     {
       "id": "ING-010",
@@ -30,7 +35,12 @@
       "calories": 1825,
       "protein": 65,
       "carbs": 380,
-      "fat": 5
+      "fat": 5,
+      "fiber": 15.0,
+      "sugar": 2.0,
+      "sodium": 10.0,
+      "cholesterol": 0.0,
+      "category": "Grain"
     },
     {
       "id": "ING-011",
@@ -40,7 +50,12 @@
       "calories": 340,
       "protein": 13,
       "carbs": 72,
-      "fat": 2
+      "fat": 2,
+      "fiber": 10.6,
+      "sugar": 0.4,
+      "sodium": 5.0,
+      "cholesterol": 0.0,
+      "category": "Grain"
     },
     {
       "id": "ING-012",
@@ -50,7 +65,12 @@
       "calories": 0,
       "protein": 0,
       "carbs": 0,
-      "fat": 0
+      "fat": 0,
+      "fiber": 0.0,
+      "sugar": 0.0,
+      "sodium": 0.0,
+      "cholesterol": 0.0,
+      "category": "Other"
     },
     {
       "id": "ING-013",
@@ -60,7 +80,12 @@
       "calories": 0,
       "protein": 0,
       "carbs": 0,
-      "fat": 0
+      "fat": 0,
+      "fiber": 0.0,
+      "sugar": 0.0,
+      "sodium": 4680.0,
+      "cholesterol": 0.0,
+      "category": "Spice"
     }
   ],
   "steps": [

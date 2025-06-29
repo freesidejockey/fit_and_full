@@ -311,11 +311,77 @@ class PremiumRecipeLoader: ObservableObject {
         ]
         
         for fileName in recipeFiles {
-            // Look for files in the PremiumRecipes subdirectory
-            if let url = Bundle.main.url(forResource: fileName, withExtension: "json", subdirectory: "PremiumRecipes") {
-                let data = try Data(contentsOf: url)
+            var fileUrl: URL?
+            
+            // Try main bundle first (since this is working according to user feedback)
+            if let mainBundleUrl = Bundle.main.url(forResource: fileName, withExtension: "json") {
+                print("✅ Found file in main bundle: \(fileName).json at \(mainBundleUrl)")
+                fileUrl = mainBundleUrl
+            } else if let subdirectoryUrl = Bundle.main.url(forResource: fileName, withExtension: "json", subdirectory: "PremiumRecipes") {
+                print("✅ Found file in PremiumRecipes subdirectory: \(fileName).json at \(subdirectoryUrl)")
+                fileUrl = subdirectoryUrl
+            } else {
+                print("❌ Could not find file anywhere: \(fileName).json")
+                
+                // Debug: List all JSON files in bundle
+                if let bundlePath = Bundle.main.resourcePath {
+                    print("📁 Bundle resource path: \(bundlePath)")
+                    
+                    // List all files in bundle
+                    if let files = try? FileManager.default.contentsOfDirectory(atPath: bundlePath) {
+                        let jsonFiles = files.filter { $0.hasSuffix(".json") }
+                        print("📄 JSON files in main bundle: \(jsonFiles)")
+                    }
+                    
+                    // Check PremiumRecipes subdirectory
+                    let premiumPath = bundlePath + "/PremiumRecipes"
+                    if let premiumFiles = try? FileManager.default.contentsOfDirectory(atPath: premiumPath) {
+                        print("📄 Files in PremiumRecipes subdirectory: \(premiumFiles)")
+                    } else {
+                        print("❌ PremiumRecipes subdirectory not found at: \(premiumPath)")
+                    }
+                }
+                continue
+            }
+            
+            // Now try to load and decode the JSON
+            do {
+                print("📖 Reading data from: \(fileUrl!)")
+                let data = try Data(contentsOf: fileUrl!)
+                print("📊 Data size: \(data.count) bytes")
+                
+                // Let's see the raw JSON content for debugging
+                if let jsonString = String(data: data, encoding: .utf8) {
+                    print("📝 JSON content preview (first 200 chars): \(String(jsonString.prefix(200)))")
+                } else {
+                    print("❌ Could not convert data to string")
+                }
+                
+                print("🔄 Attempting to decode JSON...")
                 let recipe = try JSONDecoder().decode(PremiumRecipe.self, from: data)
+                print("✅ Successfully decoded recipe: \(recipe.name)")
                 allRecipes.append(recipe)
+                
+            } catch let decodingError as DecodingError {
+                print("❌ JSON Decoding Error for \(fileName):")
+                switch decodingError {
+                case .typeMismatch(let type, let context):
+                    print("  Type mismatch: Expected \(type), at path: \(context.codingPath)")
+                    print("  Debug description: \(context.debugDescription)")
+                case .valueNotFound(let type, let context):
+                    print("  Value not found: \(type), at path: \(context.codingPath)")
+                    print("  Debug description: \(context.debugDescription)")
+                case .keyNotFound(let key, let context):
+                    print("  Key not found: \(key), at path: \(context.codingPath)")
+                    print("  Debug description: \(context.debugDescription)")
+                case .dataCorrupted(let context):
+                    print("  Data corrupted at path: \(context.codingPath)")
+                    print("  Debug description: \(context.debugDescription)")
+                @unknown default:
+                    print("  Unknown decoding error: \(decodingError)")
+                }
+            } catch {
+                print("❌ General error loading \(fileName): \(error.localizedDescription)")
             }
         }
         

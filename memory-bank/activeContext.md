@@ -96,3 +96,21 @@ This file tracks the project's current status, including recent changes, current
 - **Investigation Focus**: Analyzing edit button implementation, data model structure, and existing edit patterns
 - **Key Components Examined**: RecipeDetailsView.swift, RecipeModels.swift, YourRecipesView.swift, RecipeCreationWizardView.swift
 - **Root Cause Identified**: Edit button has no navigation or action implementation - only prints debug message
+
+[2025-06-28 13:39:00] - Premium Recipe JSON Decoding Error Fixed
+
+- **Root Cause Identified**: All premium recipe JSON files were missing required enhanced macro tracking fields
+- **Issue**: PremiumIngredient model expects `fiber`, `sugar`, `sodium`, `cholesterol`, and `category` fields but JSON files only had basic nutrition data
+- **Error Message**: "Key not found: CodingKeys(stringValue: "fiber", intValue: nil)" for artisan_sourdough_bread recipe
+- **Solution Implemented**:
+  - Updated all 6 premium recipe JSON files to include missing fields with realistic nutrition values
+  - Added appropriate category classifications (Protein, Vegetable, Grain, Dairy, Fat, Spice, Other)
+  - Maintained nutritional accuracy with research-based values for fiber, sugar, sodium, and cholesterol content
+- **Files Updated**:
+  - artisan_sourdough_bread.json
+  - chocolate_lava_cake.json
+  - gourmet_salmon_teriyaki.json
+  - mediterranean_quinoa_bowl.json
+  - truffle_mushroom_risotto.json
+  - spinach_artichoke_chicken_casserole.json
+- **Status**: All premium recipes should now load successfully without JSON decoding errors
