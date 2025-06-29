@@ -30,13 +30,13 @@ struct MainTabView: View {
                         }
 
                     // Shopping Tab
-                    GroceryListView(backgroundColor: $backgroundColor,
-                                    accentTextColor: $accentTextColor,
-                                    accentColor: $accentColor)
-                        .tabItem {
-                            Image(systemName: "bag.fill")
-                            Text("Shopping")
-                        }
+//                    GroceryListView(backgroundColor: $backgroundColor,
+//                                    accentTextColor: $accentTextColor,
+//                                    accentColor: $accentColor)
+//                        .tabItem {
+//                            Image(systemName: "bag.fill")
+//                            Text("Shopping")
+//                        }
 
                     // Explore Tab
                     ExploreRecipesView()
@@ -46,42 +46,42 @@ struct MainTabView: View {
                         }
 
                     // Settings Tab
-                    SettingsView(backgroundColor: $backgroundColor,
-                                 accentTextColor: $accentTextColor,
-                                 accentColor: $accentColor)
-                        .tabItem {
-                            Image(systemName: "gearshape.fill")
-                            Text("Settings")
-                        }
+//                    SettingsView(backgroundColor: $backgroundColor,
+//                                 accentTextColor: $accentTextColor,
+//                                 accentColor: $accentColor)
+//                        .tabItem {
+//                            Image(systemName: "gearshape.fill")
+//                            Text("Settings")
+//                        }
                 }
                 .accentColor(accentColor)
                 
-                VStack {
-                    Button(action: {
-                        print("Circular Button tapped")
-                        isPresentingAddSheet = true
-                    }) {
-                        Image(systemName: "plus")
-                            .frame(width: 50, height: 50)
-                            .foregroundColor(backgroundColor)
-                            .background(accentColor)
-                            .clipShape(Circle())
-                    }
-                        .padding(.bottom, 60)
-                        .padding(.trailing, 25)
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
+//                VStack {
+//                    Button(action: {
+//                        print("Circular Button tapped")
+//                        isPresentingAddSheet = true
+//                    }) {
+//                        Image(systemName: "plus")
+//                            .frame(width: 50, height: 50)
+//                            .foregroundColor(backgroundColor)
+//                            .background(accentColor)
+//                            .clipShape(Circle())
+//                    }
+//                        .padding(.bottom, 60)
+//                        .padding(.trailing, 25)
+//                }
+//                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
                 
-                // Hidden navigation links
-                NavigationLink(destination: MealPlanView(), isActive: $navigateToMealPlan) {
-                    EmptyView()
-                }
-                .hidden()
-                
-                NavigationLink(destination: RecipeCreationWizardView(), isActive: $navigateToRecipe) {
-                    EmptyView()
-                }
-                .hidden()
+//                // Hidden navigation links
+//                NavigationLink(destination: MealPlanView(), isActive: $navigateToMealPlan) {
+//                    EmptyView()
+//                }
+//                .hidden()
+//                
+//                NavigationLink(destination: RecipeCreationWizardView(), isActive: $navigateToRecipe) {
+//                    EmptyView()
+//                }
+//                .hidden()
             }
             .sheet(isPresented: $isPresentingAddSheet) {
                 AddOptionsSheet(backgroundColor: backgroundColor,

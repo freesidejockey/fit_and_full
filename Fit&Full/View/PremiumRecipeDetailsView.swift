@@ -22,76 +22,48 @@ struct PremiumRecipeDetailsView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 24) {
-                // Recipe Header Section
-                VStack(alignment: .leading, spacing: 20) {
-                    HStack(alignment: .top) {
-                        VStack(alignment: .leading, spacing: 14) {
-                            Text(premiumRecipe.name)
-                                .font(.largeTitle)
-                                .fontWeight(.bold)
-                            
-                            HStack(spacing: 12) {
-                                // Premium badge
-                                HStack(spacing: 4) {
-                                    Image(systemName: "crown.fill")
-                                        .foregroundColor(.orange)
-                                        .font(.caption)
-                                    Text("Premium")
-                                        .font(.caption)
-                                        .fontWeight(.semibold)
-                                        .foregroundColor(.orange)
-                                }
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 4)
-                                .background(.orange.opacity(0.1))
-                                .cornerRadius(6)
-                                
-                                // Category
-                                Text(premiumRecipe.category)
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                                    .textCase(.uppercase)
-                                    .fontWeight(.medium)
-                                
-                                // Difficulty
-                                Text("• \(premiumRecipe.difficulty)")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                            }
-                        }
-                        
-                        Spacer()
-                        
-                        // Action buttons
-                        VStack(spacing: 8) {
-                            Button(action: { isFavorite.toggle() }) {
-                                HStack(spacing: 6) {
-                                    Image(systemName: isFavorite ? "heart.fill" : "heart")
-                                        .foregroundColor(isFavorite ? .red : .primary)
-                                    Text("Favorite")
-                                        .font(.caption)
-                                }
-                                .padding(.horizontal, 12)
-                                .padding(.vertical, 8)
-                                .background(.gray.opacity(0.1))
-                                .cornerRadius(8)
-                            }
-                            
-                            Button(action: {}) {
-                                HStack(spacing: 6) {
-                                    Image(systemName: "square.and.pencil")
-                                    Text("Edit")
-                                        .font(.caption)
-                                }
-                                .padding(.horizontal, 12)
-                                .padding(.vertical, 8)
-                                .background(.gray.opacity(0.1))
-                                .cornerRadius(8)
-                            }
-                        }
-                        .frame(minWidth: 80)
-                    }
+                // Recipe Title and Actions Section
+                VStack(spacing: 16) {
+                    // Recipe Title
+                    Text(premiumRecipe.name)
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, 20)
                     
+                    // Action Buttons
+                    HStack(spacing: 16) {
+                        HStack(spacing: 12) {
+                            // Premium badge
+                            HStack(spacing: 4) {
+                                Image(systemName: "crown.fill")
+                                    .foregroundColor(.orange)
+                                    .font(.caption)
+                                Text("Premium")
+                                    .font(.caption)
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(.orange)
+                            }
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 4)
+                            .background(.orange.opacity(0.1))
+                            .cornerRadius(6)
+                            
+                            // Category
+                            Text(premiumRecipe.category)
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                                .textCase(.uppercase)
+                                .fontWeight(.medium)
+                            
+                            // Difficulty
+                            Text("• \(premiumRecipe.difficulty)")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                }
+                VStack(alignment: .leading, spacing: 20) {
                     // Description
                     Text(premiumRecipe.description)
                         .font(.body)

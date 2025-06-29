@@ -14,8 +14,8 @@ struct YourRecipesView: View {
     
     var body: some View {
         ZStack {
-            Color.orangeSlightlyDarker
-                .ignoresSafeArea(.container, edges: .top)
+//            Color.orangeSlightlyDarker
+//                .ignoresSafeArea()
             
             ScrollView {
                 VStack(spacing: 30) {

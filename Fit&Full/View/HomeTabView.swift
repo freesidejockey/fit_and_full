@@ -9,6 +9,10 @@ import SwiftUI
 import SwiftData
 
 struct HomeTabView: View {
+    @StateObject private var premiumRecipeLoader = PremiumRecipeLoader()
+    @State private var selectedLockedRecipe: PremiumRecipe?
+    @State private var showingLockedRecipeAlert = false
+
     @Binding var backgroundColor: Color
     @Binding var accentTextColor: Color
     @Binding var accentColor: Color
@@ -23,9 +27,6 @@ struct HomeTabView: View {
     var body: some View {
         NavigationView {
             ZStack {
-                backgroundColor
-                    .ignoresSafeArea(.container, edges: .top)
-
                 ScrollView {
                     VStack(alignment: .leading, spacing: 0) {
                         yourRecipesSection
@@ -45,6 +46,19 @@ struct HomeTabView: View {
             accentTextColor = .orangeSlightlyDarker
             accentColor = .orangeAccent
         }
+        .alert("Premium Recipe", isPresented: $showingLockedRecipeAlert) {
+            Button("Upgrade to Premium") {
+                // TODO: Implement paywall/upgrade flow
+                if let recipe = selectedLockedRecipe {
+                    premiumRecipeLoader.unlockRecipe(withId: recipe.id)
+                }
+            }
+            Button("Cancel", role: .cancel) { }
+        } message: {
+            if let recipe = selectedLockedRecipe {
+                Text("'\(recipe.name)' is a premium recipe. Upgrade to access our full collection of curated recipes with detailed instructions and nutrition information.")
+            }
+        }
     }
     
     private var yourRecipesSection: some View {
@@ -61,7 +75,6 @@ struct HomeTabView: View {
                         .font(.title3)
                 }
             }
-            
             yourRecipesGrid
         }
     }
@@ -90,6 +103,9 @@ struct HomeTabView: View {
                     .frame(height: 120)
                     .background(.tealLightBackground)
                     .cornerRadius(12)
+                    .padding(.bottom, 20)
+                    .padding(.leading, 20)
+                    .padding(.trailing, 20)
                 }
                 .buttonStyle(PlainButtonStyle())
             } else {
@@ -133,19 +149,62 @@ struct HomeTabView: View {
     }
     
     private var exploreRecipesGrid: some View {
-        let columns = Array(repeating: GridItem(.flexible(), spacing: 15), count: 2)
-        let exploreRecipes = Array(sampleRecipes.suffix(4)) // Use last 4 recipes for explore section
-        
-        return LazyVGrid(columns: columns, spacing: 15) {
-            ForEach(0..<min(4, exploreRecipes.count), id: \.self) { index in
-                NavigationLink(destination: RecipeDetailsView(recipe: exploreRecipes[index])) {
-                    RecipePreviewComponent(
-                        recipe: exploreRecipes[index],
-                        backgroundColor: index % 2 == 0 ? .blueLightBackground : .orangeLightBackground
-                    )
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 15) {
+                ForEach(premiumRecipeLoader.premiumRecipes, id: \.id) { recipe in
+                    if recipe.isLocked {
+                        Button(action: {
+                            handlePremiumRecipeTap(recipe)
+                        }) {
+                            PremiumRecipePreviewComponent(
+                                recipe: recipe,
+                                backgroundColor: backgroundColorForPremiumRecipe(recipe)
+                            )
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                        .frame(width: 280)
+                    } else {
+                        NavigationLink(destination: PremiumRecipeDetailsView(premiumRecipe: recipe)) {
+                            PremiumRecipePreviewComponent(
+                                recipe: recipe,
+                                backgroundColor: backgroundColorForPremiumRecipe(recipe)
+                            )
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                        .frame(width: 280)
+                    }
                 }
             }
+            .padding(.horizontal)
         }
+//        let columns = Array(repeating: GridItem(.flexible(), spacing: 15), count: 2)
+//        let exploreRecipes = Array(sampleRecipes.suffix(4)) // Use last 4 recipes for explore section
+//        
+//        return LazyVGrid(columns: columns, spacing: 15) {
+//            ForEach(0..<min(4, exploreRecipes.count), id: \.self) { index in
+//                NavigationLink(destination: RecipeDetailsView(recipe: exploreRecipes[index])) {
+//                    RecipePreviewComponent(
+//                        recipe: exploreRecipes[index],
+//                        backgroundColor: index % 2 == 0 ? .blueLightBackground : .orangeLightBackground
+//                    )
+//                }
+//            }
+//        }
+    }
+    
+    private func handlePremiumRecipeTap(_ recipe: PremiumRecipe) {
+        if recipe.isLocked {
+            selectedLockedRecipe = recipe
+            showingLockedRecipeAlert = true
+        }
+        // For unlocked recipes, navigation is handled by NavigationLink directly
+    }
+    
+    private func backgroundColorForPremiumRecipe(_ recipe: PremiumRecipe) -> Color {
+        // Color assignment for premium recipes
+        let colors: [Color] = [.blue, .purple, .teal, .green, .orange]
+        let index = abs(recipe.name.hashValue) % colors.count
+        return colors[index]
     }
 }
 

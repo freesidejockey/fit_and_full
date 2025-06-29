@@ -28,6 +28,32 @@ struct ExploreRecipesView: View {
                     .multilineTextAlignment(.center)
                     .padding(.horizontal)
                 
+                // Popular recipes grid (mix of premium and regular)
+                VStack(alignment: .leading, spacing: 15) {
+                    Text("Free This Week")
+                        .font(.headline)
+                        .padding(.horizontal)
+                    
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 15) {
+                            ForEach(premiumRecipeLoader.premiumRecipes, id: \.id) { recipe in
+                                if recipe.isLocked {
+                                    // Only put free recipes here
+                                } else {
+                                    NavigationLink(destination: PremiumRecipeDetailsView(premiumRecipe: recipe)) {
+                                        PremiumRecipePreviewComponent(
+                                            recipe: recipe,
+                                            backgroundColor: backgroundColorForPremiumRecipe(recipe)
+                                        )
+                                    }
+                                    .buttonStyle(PlainButtonStyle())
+                                    .frame(width: 280)
+                                }
+                            }
+                        }
+                        .padding(.horizontal)
+                    }
+                }
                 // Premium recipes section
                 if !premiumRecipeLoader.premiumRecipes.isEmpty {
                     VStack(alignment: .leading, spacing: 15) {
@@ -79,69 +105,7 @@ struct ExploreRecipesView: View {
                     }
                 }
                 
-                // Featured recipes section (regular recipes)
-                VStack(alignment: .leading, spacing: 15) {
-                    Text("Featured Recipes")
-                        .font(.headline)
-                        .padding(.horizontal)
-                    
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 15) {
-                            ForEach(sampleRecipes, id: \.id) { recipe in
-                                NavigationLink(destination: RecipeDetailsView(recipe: recipe)) {
-                                    RecipePreviewComponent(recipe: recipe, backgroundColor: .blueLightBackground)
-                                }
-                                .buttonStyle(PlainButtonStyle())
-                            }
-                        }
-                        .padding(.horizontal)
-                    }
-                }
                 
-                // Popular recipes grid (mix of premium and regular)
-                VStack(alignment: .leading, spacing: 15) {
-                    Text("Popular This Week")
-                        .font(.headline)
-                        .padding(.horizontal)
-                    
-                    LazyVGrid(columns: [
-                        GridItem(.flexible(), spacing: 15),
-                        GridItem(.flexible(), spacing: 15)
-                    ], spacing: 15) {
-                        // Show unlocked premium recipes first
-                        ForEach(premiumRecipeLoader.unlockedRecipes.prefix(2), id: \.id) { recipe in
-                            NavigationLink(destination: PremiumRecipeDetailsView(premiumRecipe: recipe)) {
-                                PremiumRecipePreviewComponent(
-                                    recipe: recipe,
-                                    backgroundColor: backgroundColorForPremiumRecipe(recipe)
-                                )
-                            }
-                            .buttonStyle(PlainButtonStyle())
-                        }
-                        
-                        // Then show regular recipes
-                        ForEach(sampleRecipes.reversed(), id: \.id) { recipe in
-                            NavigationLink(destination: RecipeDetailsView(recipe: recipe)) {
-                                RecipePreviewComponent(recipe: recipe, backgroundColor: .tealLightBackground)
-                            }
-                            .buttonStyle(PlainButtonStyle())
-                        }
-                        
-                        // Show some locked premium recipes to entice users
-                        ForEach(premiumRecipeLoader.lockedRecipes.prefix(2), id: \.id) { recipe in
-                            Button(action: {
-                                handlePremiumRecipeTap(recipe)
-                            }) {
-                                PremiumRecipePreviewComponent(
-                                    recipe: recipe,
-                                    backgroundColor: backgroundColorForPremiumRecipe(recipe)
-                                )
-                            }
-                            .buttonStyle(PlainButtonStyle())
-                        }
-                    }
-                    .padding(.horizontal)
-                }
                 
                 // Error message if premium recipes failed to load
                 if let errorMessage = premiumRecipeLoader.errorMessage {

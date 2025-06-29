@@ -139,26 +139,6 @@ struct PremiumRecipePreviewComponent: View {
                 
                 Spacer()
             }
-            
-            // Lock overlay for locked recipes
-            if recipe.isLocked {
-                HStack {
-                    Spacer()
-                    VStack(spacing: 4) {
-                        Image(systemName: "lock.fill")
-                            .font(.title2)
-                            .foregroundColor(.orange)
-                        Text("Premium")
-                            .font(.caption)
-                            .fontWeight(.semibold)
-                            .foregroundColor(.orange)
-                    }
-                    Spacer()
-                }
-                .padding(.vertical, 8)
-                .background(.orange.opacity(0.1))
-                .cornerRadius(8)
-            }
         }
         .padding(16)
         .background(backgroundColor.opacity(0.1))

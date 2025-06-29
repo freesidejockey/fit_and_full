@@ -32,28 +32,6 @@ struct RecipeDetailsView: View {
                         
                         // Action Buttons
                         HStack(spacing: 16) {
-                            // Favorite Button
-                            Button(action: {
-                                isFavorite.toggle()
-                                print("Favorite toggled for \(recipe.name): \(isFavorite)")
-                            }) {
-                                HStack(spacing: 8) {
-                                    Image(systemName: isFavorite ? "heart.fill" : "heart")
-                                        .font(.headline)
-                                        .fontWeight(.semibold)
-                                    Text(isFavorite ? "Favorited" : "Favorite")
-                                        .font(.headline)
-                                        .fontWeight(.semibold)
-                                }
-                                .foregroundColor(isFavorite ? .red : .primary)
-                                .padding(.horizontal, 16)
-                                .padding(.vertical, 8)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 8)
-                                        .stroke(isFavorite ? .red : Color(.systemGray4), lineWidth: 1)
-                                )
-                            }
-                            
                             // Edit Button
                             Button(action: {
                                 showingEditView = true
