@@ -25,21 +25,19 @@ struct HomeTabView: View {
     private let sampleRecipes = Recipe.sampleRecipes
 
     var body: some View {
-        NavigationView {
-            ZStack {
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 0) {
-                        yourRecipesSection
-                        exploreRecipesSection
-                        Spacer(minLength: 100) // Extra space for tab bar
-                    }
-                    .padding(.horizontal, 10)
-                    .padding(.top, 0) // Reduced from 20 to 5
+        ZStack {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 0) {
+                    yourRecipesSection
+                    exploreRecipesSection
+                    Spacer(minLength: 100) // Extra space for tab bar
                 }
+                .padding(.horizontal, 10)
+                .padding(.top, 0) // Reduced from 20 to 5
             }
-            .navigationTitle("Fit & Full")
-            .navigationBarTitleDisplayMode(.inline)
         }
+        .navigationTitle("Fit & Full")
+        .navigationBarTitleDisplayMode(.large)
         .onAppear {
             // Update your bindings here
             backgroundColor = .orangeSlightlyDarker
@@ -62,7 +60,7 @@ struct HomeTabView: View {
     }
     
     private var yourRecipesSection: some View {
-        VStack(alignment: .leading, spacing: 15) {
+        VStack(alignment: .leading, spacing: 0) {
             NavigationLink(destination: YourRecipesView()) {
                 HStack {
                     Text("Your Recipes")
@@ -77,37 +75,44 @@ struct HomeTabView: View {
             }
             yourRecipesGrid
         }
+        .padding(.top, 10)
+    }
+    
+    private func addRecipeComponent(mainText: String, secondaryText: String) -> some View {
+        Group {
+            NavigationLink(destination: RecipeCreationWizardView()) {
+                VStack(spacing: 12) {
+                    Image(systemName: "plus.circle.fill")
+                        .font(.system(size: 40))
+                        .foregroundColor(.orangeAccent)
+                    
+                    Text(mainText)
+                        .font(.headline)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.black)
+                    
+                    Text(secondaryText)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
+                }
+                .frame(maxWidth: .infinity)
+                .frame(height: 120)
+                .background(.tealLightBackground)
+                .cornerRadius(12)
+                .padding(.bottom, 20)
+                .padding(.leading, 20)
+                .padding(.trailing, 20)
+            }
+            .buttonStyle(PlainButtonStyle())
+        }
     }
     
     private var yourRecipesGrid: some View {
         Group {
             if recipes.isEmpty {
                 // Empty state - Create Your First Recipe card
-                NavigationLink(destination: RecipeCreationWizardView()) {
-                    VStack(spacing: 12) {
-                        Image(systemName: "plus.circle.fill")
-                            .font(.system(size: 40))
-                            .foregroundColor(.orangeAccent)
-                        
-                        Text("Create Your First Recipe")
-                            .font(.headline)
-                            .fontWeight(.semibold)
-                            .foregroundColor(.black)
-                        
-                        Text("Start building your recipe collection")
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                            .multilineTextAlignment(.center)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 120)
-                    .background(.tealLightBackground)
-                    .cornerRadius(12)
-                    .padding(.bottom, 20)
-                    .padding(.leading, 20)
-                    .padding(.trailing, 20)
-                }
-                .buttonStyle(PlainButtonStyle())
+                addRecipeComponent(mainText: "Create Your First Recipe", secondaryText: "Start building your recipe collection")
             } else {
                 // Horizontal scrolling view of actual SwiftData recipes
                 ScrollView(.horizontal, showsIndicators: false) {
@@ -125,6 +130,7 @@ struct HomeTabView: View {
                     }
                     .padding(.horizontal, 20)
                 }
+                addRecipeComponent(mainText: "Create A New Recipe", secondaryText: "Continue growing your collection")
             }
         }
     }

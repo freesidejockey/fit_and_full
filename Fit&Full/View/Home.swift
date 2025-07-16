@@ -13,6 +13,7 @@ struct Home: View {
     @State private var activeIntro: Intro?
     @State private var showLandingPage = false
     @State private var circleScale: CGFloat = 1
+    @State private var isFirstLaunch: Bool = UserDefaults.standard.object(forKey: "hasLaunchedBefore") == nil
 
     var body: some View {
         GeometryReader {
@@ -66,11 +67,16 @@ struct Home: View {
         }
         .task {
             if activeIntro == nil {
-                activeIntro = intros.first
-                /// Delaying 0.15s and Starting Animation
-                let delay = UInt64(1_000_000_000 * 0.5)
-                try? await Task.sleep(nanoseconds: delay)
-                animate(0, false)
+                if isFirstLaunch {
+                    // First launch: show full animation sequence
+                    activeIntro = intros.first
+                    /// Delaying 0.5s and Starting Animation
+                    let delay = UInt64(1_000_000_000 * 0.5)
+                    try? await Task.sleep(nanoseconds: delay)
+                    animate(0, false)
+                } else {
+                    showLandingPage = true
+                }
             }
         }
     }
@@ -101,6 +107,11 @@ struct Home: View {
         } else {
             // Instead of looping, expand circle and transition to landing page
             if !showLandingPage {
+                // Mark first launch as complete
+                if isFirstLaunch {
+                    UserDefaults.standard.set(true, forKey: "hasLaunchedBefore")
+                    isFirstLaunch = false
+                }
                 expandCircleAndTransition()
             }
         }
