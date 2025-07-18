@@ -93,7 +93,6 @@ struct CookingWizardView: View {
         .background(Color(.systemGroupedBackground))
         .navigationTitle("Cooking")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar(.hidden, for: .tabBar)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button("Cancel") {

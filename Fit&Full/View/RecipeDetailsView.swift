@@ -93,7 +93,6 @@ struct RecipeDetailsView: View {
             .background(Color(.systemGroupedBackground))
             .navigationTitle("Recipe")
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar(.hidden, for: .tabBar)
             .safeAreaInset(edge: .bottom) {
                 // Start Cooking Button
                 Button(action: {
@@ -122,9 +121,7 @@ struct RecipeDetailsView: View {
                 }
             }
             .sheet(isPresented: $showingEditView) {
-                NavigationView {
-                    RecipeCreationWizardView(recipe: recipe)
-                }
+                RecipeCreationWizardView(recipe: recipe)
             }
             .alert("Delete Recipe", isPresented: $showingDeleteAlert) {
                 Button("Cancel", role: .cancel) { }
@@ -164,7 +161,6 @@ struct RecipeDetailsView: View {
             .background(Color(.systemGroupedBackground))
             .navigationTitle("Recipe")
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar(.hidden, for: .tabBar)
         }
     }
     

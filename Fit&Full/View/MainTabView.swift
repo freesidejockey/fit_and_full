@@ -18,81 +18,63 @@ struct MainTabView: View {
 
     var body: some View {
         NavigationView {
-            ZStack {
-                TabView {
-                    // Home Tab
-                    HomeTabView(backgroundColor: $backgroundColor,
-                                accentTextColor: $accentTextColor,
-                                accentColor: $accentColor)
-                        .tabItem {
-                            Image(systemName: "house.fill")
-                            Text("Home")
-                        }
-
-                    // Shopping Tab
-//                    GroceryListView(backgroundColor: $backgroundColor,
-//                                    accentTextColor: $accentTextColor,
-//                                    accentColor: $accentColor)
-//                        .tabItem {
-//                            Image(systemName: "bag.fill")
-//                            Text("Shopping")
-//                        }
-
-                    // Explore Tab
-                    ExploreRecipesView()
-                        .tabItem {
-                            Image(systemName: "safari.fill")
-                            Text("Explore")
-                        }
-
-                    // Settings Tab
-//                    SettingsView(backgroundColor: $backgroundColor,
-//                                 accentTextColor: $accentTextColor,
-//                                 accentColor: $accentColor)
-//                        .tabItem {
-//                            Image(systemName: "gearshape.fill")
-//                            Text("Settings")
-//                        }
-                }
-                .accentColor(accentColor)
-                
-//                VStack {
-//                    Button(action: {
-//                        print("Circular Button tapped")
-//                        isPresentingAddSheet = true
-//                    }) {
-//                        Image(systemName: "plus")
-//                            .frame(width: 50, height: 50)
-//                            .foregroundColor(backgroundColor)
-//                            .background(accentColor)
-//                            .clipShape(Circle())
-//                    }
-//                        .padding(.bottom, 60)
-//                        .padding(.trailing, 25)
-//                }
-//                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
-                
-//                // Hidden navigation links
-//                NavigationLink(destination: MealPlanView(), isActive: $navigateToMealPlan) {
-//                    EmptyView()
-//                }
-//                .hidden()
-//                
-//                NavigationLink(destination: RecipeCreationWizardView(), isActive: $navigateToRecipe) {
-//                    EmptyView()
-//                }
-//                .hidden()
-            }
-            .sheet(isPresented: $isPresentingAddSheet) {
-                AddOptionsSheet(backgroundColor: backgroundColor,
-                               accentTextColor: accentTextColor,
-                               accentColor: accentColor,
-                               navigateToMealPlan: $navigateToMealPlan,
-                               navigateToRecipe: $navigateToRecipe,
-                               isPresentingAddSheet: $isPresentingAddSheet)
-                .presentationDetents([.fraction(0.2)])
-                .presentationDragIndicator(.visible)
-            }
+            HomeTabView(backgroundColor: $backgroundColor,
+                        accentTextColor: $accentTextColor,
+                        accentColor: $accentColor)
+        }
+//        TabView {
+//            // Home Tab
+//            NavigationView {
+//                HomeTabView(backgroundColor: $backgroundColor,
+//                            accentTextColor: $accentTextColor,
+//                            accentColor: $accentColor)
+//            }
+//            .tabItem {
+//                Image(systemName: "house.fill")
+//                Text("Home")
+//            }
+//
+//            // Shopping Tab
+////            NavigationView {
+////                GroceryListView(backgroundColor: $backgroundColor,
+////                                accentTextColor: $accentTextColor,
+////                                accentColor: $accentColor)
+////            }
+////            .tabItem {
+////                Image(systemName: "bag.fill")
+////                Text("Shopping")
+////            }
+//
+//            // Explore Tab
+//            NavigationView {
+//                ExploreRecipesView()
+//            }
+//            .tabItem {
+//                Image(systemName: "safari.fill")
+//                Text("Explore")
+//            }
+//
+//            // Settings Tab
+////            NavigationView {
+////                SettingsView(backgroundColor: $backgroundColor,
+////                             accentTextColor: $accentTextColor,
+////                             accentColor: $accentColor)
+////            }
+////            .tabItem {
+////                Image(systemName: "gearshape.fill")
+////                Text("Settings")
+////            }
+//        }
+        .accentColor(accentColor)
+        .sheet(isPresented: $isPresentingAddSheet) {
+            AddOptionsSheet(backgroundColor: backgroundColor,
+                           accentTextColor: accentTextColor,
+                           accentColor: accentColor,
+                           navigateToMealPlan: $navigateToMealPlan,
+                           navigateToRecipe: $navigateToRecipe,
+                           isPresentingAddSheet: $isPresentingAddSheet)
+            .presentationDetents([.fraction(0.2)])
+            .presentationDragIndicator(.visible)
         }
     }
 }
@@ -196,8 +178,7 @@ struct CreateRecipeView: View {
     @State private var isSaving = false
     
     var body: some View {
-        NavigationView {
-            ScrollView {
+        ScrollView {
                 VStack(spacing: 20) {
                     // Recipe Name Section
                     VStack(alignment: .leading, spacing: 12) {
@@ -486,7 +467,6 @@ struct CreateRecipeView: View {
                     .foregroundColor(.primary)
                 }
             }
-        }
         .onAppear {
             if ingredients.isEmpty {
                 addIngredient()

@@ -90,7 +90,6 @@ struct PremiumRecipeDetailsView: View {
         }
         .navigationTitle("Recipe")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar(.hidden, for: .tabBar)
         .safeAreaInset(edge: .bottom) {
             // Start Cooking Button
             Button(action: {

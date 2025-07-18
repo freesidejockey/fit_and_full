@@ -67,44 +67,42 @@ struct RecipeCreationWizardView: View {
     }
     
     var body: some View {
-        NavigationView {
-            ZStack {
-                Color(.systemGroupedBackground)
-                    .ignoresSafeArea()
+        ZStack {
+            Color(.systemGroupedBackground)
+                .ignoresSafeArea()
+            
+            VStack(spacing: 0) {
+                // Progress indicator
+                progressIndicator
                 
-                VStack(spacing: 0) {
-                    // Progress indicator
-                    progressIndicator
-                    
-                    // Main content
-                    ScrollView {
-                        VStack(spacing: 24) {
-                            switch currentStep {
-                            case .basicInfo:
-                                basicInfoStep
-                            case .timingAndPreparation:
-                                timingAndPreparationStep
-                            }
-                            
-                            Spacer(minLength: 120) // Space for navigation buttons
+                // Main content
+                ScrollView {
+                    VStack(spacing: 24) {
+                        switch currentStep {
+                        case .basicInfo:
+                            basicInfoStep
+                        case .timingAndPreparation:
+                            timingAndPreparationStep
                         }
-                        .padding(.horizontal, 20)
-                        .padding(.top, 20)
+                        
+                        Spacer(minLength: 120) // Space for navigation buttons
                     }
-                    
-                    // Navigation buttons
-                    wizardNavigation
+                    .padding(.horizontal, 20)
+                    .padding(.top, 20)
                 }
+                
+                // Navigation buttons
+                wizardNavigation
             }
-            .navigationTitle(isEditing ? "Edit Recipe" : "Create Recipe")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
-                        showingCancelConfirmation = true
-                    }
-                    .foregroundColor(.orangeAccent)
+        }
+        .navigationTitle(isEditing ? "Edit Recipe" : "Create Recipe")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button("Cancel") {
+                    showingCancelConfirmation = true
                 }
+                .foregroundColor(.orangeAccent)
             }
         }
         .sheet(isPresented: $showingIngredientModal) {
@@ -705,6 +703,7 @@ struct RecipeCreationWizardView: View {
         } else {
             ingredients.append(ingredient)
         }
+        showingIngredientModal = false
         editingIngredient = nil
     }
     

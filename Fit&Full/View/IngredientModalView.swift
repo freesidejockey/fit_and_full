@@ -189,22 +189,6 @@ struct IngredientModalView: View {
                         MacroField(title: "Fat", value: $fat, unit: "g", color: .blueAccent)
                     }
                 }
-                
-                Divider()
-                    .padding(.vertical, 4)
-                
-                // Additional macros
-                VStack(spacing: 12) {
-                    HStack(spacing: 12) {
-                        MacroField(title: "Fiber", value: $fiber, unit: "g", color: .green)
-                        MacroField(title: "Sugar", value: $sugar, unit: "g", color: .pink)
-                    }
-                    
-                    HStack(spacing: 12) {
-                        MacroField(title: "Sodium", value: $sodium, unit: "mg", color: .orange)
-                        MacroField(title: "Cholesterol", value: $cholesterol, unit: "mg", color: .red)
-                    }
-                }
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 16)
@@ -229,25 +213,6 @@ struct IngredientModalView: View {
             }
             
             VStack(spacing: 16) {
-                // Category
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Category")
-                        .font(.system(size: 14, weight: .medium))
-                        .foregroundColor(.primary)
-                    
-                    Picker("Category", selection: $selectedCategory) {
-                        ForEach(categories, id: \.self) { category in
-                            Text(category).tag(category)
-                        }
-                    }
-                    .pickerStyle(MenuPickerStyle())
-                    .frame(height: 36)
-                    .background(
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(Color(.systemGray4), lineWidth: 1)
-                    )
-                }
-                
                 // Brand (optional)
                 VStack(alignment: .leading, spacing: 8) {
                     Text("Brand (Optional)")
