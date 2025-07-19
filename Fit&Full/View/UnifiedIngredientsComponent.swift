@@ -131,8 +131,15 @@ struct UnifiedIngredientRow: View {
     let ingredient: any IngredientProtocol
     let multiplier: Double
     
+    private var servingsUsed: Double {
+        if let ingredient = ingredient as? Ingredient {
+            return ingredient.servingsUsedInRecipe
+        }
+        return 1.0
+    }
+    
     private var adjustedServingSize: Double {
-        ingredient.servingSize * multiplier
+        ingredient.servingSize * servingsUsed * multiplier
     }
     
     private var formattedServingSize: String {
@@ -147,9 +154,16 @@ struct UnifiedIngredientRow: View {
     var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 2) {
-                Text(ingredient.name)
-                    .font(.system(size: 15, weight: .medium))
-                    .foregroundColor(.primary)
+                // Show ingredient name with servings indicator if not 1.0
+                if servingsUsed != 1.0 {
+                    Text("\(ingredient.name) (\(formatServings(servingsUsed)) servings)")
+                        .font(.system(size: 15, weight: .medium))
+                        .foregroundColor(.primary)
+                } else {
+                    Text(ingredient.name)
+                        .font(.system(size: 15, weight: .medium))
+                        .foregroundColor(.primary)
+                }
                 
                 Text(formattedServingSize)
                     .font(.system(size: 13, weight: .regular))
@@ -159,11 +173,18 @@ struct UnifiedIngredientRow: View {
             Spacer()
             
             // Optional: Show adjusted nutrition info
-            Text("\(Int(ingredient.calories * multiplier)) cal")
+            Text("\(Int(ingredient.calories * servingsUsed * multiplier)) cal")
                 .font(.system(size: 12, weight: .medium))
                 .foregroundColor(.secondary)
         }
         .padding(.vertical, 4)
+    }
+    
+    private func formatServings(_ servings: Double) -> String {
+        let formatter = NumberFormatter()
+        formatter.maximumFractionDigits = 1
+        formatter.minimumFractionDigits = 0
+        return formatter.string(from: NSNumber(value: servings)) ?? "\(servings)"
     }
 }
 

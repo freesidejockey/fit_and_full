@@ -4,7 +4,7 @@
   "servings": 4,
   "rating": 4.6,
   "backgroundImageName": "mediterranean_bowl_premium",
-  "isLocked": true,
+  "isLocked": false,
   "category": "Healthy",
   "difficulty": "Easy",
   "description": "Nutritious and colorful quinoa bowl with roasted vegetables, feta cheese, olives, and a zesty lemon-herb dressing for a complete Mediterranean experience.",

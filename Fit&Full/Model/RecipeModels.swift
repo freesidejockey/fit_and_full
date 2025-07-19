@@ -486,19 +486,19 @@ class Recipe {
     
     /// Computed nutrition summary from all ingredients
     var totalCalories: Double {
-        ingredients.reduce(0) { $0 + $1.calories }
+        ingredients.reduce(0) { $0 + ($1.calories * $1.servingsUsedInRecipe) }
     }
     
     var totalProtein: Double {
-        ingredients.reduce(0) { $0 + $1.protein }
+        ingredients.reduce(0) { $0 + ($1.protein * $1.servingsUsedInRecipe) }
     }
     
     var totalCarbs: Double {
-        ingredients.reduce(0) { $0 + $1.carbs }
+        ingredients.reduce(0) { $0 + ($1.carbs * $1.servingsUsedInRecipe) }
     }
     
     var totalFat: Double {
-        ingredients.reduce(0) { $0 + $1.fat }
+        ingredients.reduce(0) { $0 + ($1.fat * $1.servingsUsedInRecipe) }
     }
     
     /// Per-serving nutrition calculations
@@ -699,19 +699,19 @@ class Recipe {
     
     /// Enhanced nutrition calculations including new macro fields
     var totalFiber: Double {
-        ingredients.reduce(0) { $0 + $1.fiber }
+        ingredients.reduce(0) { $0 + ($1.fiber * $1.servingsUsedInRecipe) }
     }
     
     var totalSugar: Double {
-        ingredients.reduce(0) { $0 + $1.sugar }
+        ingredients.reduce(0) { $0 + ($1.sugar * $1.servingsUsedInRecipe) }
     }
     
     var totalSodium: Double {
-        ingredients.reduce(0) { $0 + $1.sodium }
+        ingredients.reduce(0) { $0 + ($1.sodium * $1.servingsUsedInRecipe) }
     }
     
     var totalCholesterol: Double {
-        ingredients.reduce(0) { $0 + $1.cholesterol }
+        ingredients.reduce(0) { $0 + ($1.cholesterol * $1.servingsUsedInRecipe) }
     }
     
     /// Per-serving enhanced nutrition calculations
@@ -783,6 +783,9 @@ class Ingredient {
     var carbs: Double    // in grams
     var fat: Double      // in grams
     
+    // Servings used in this recipe (e.g., 2.5 servings of chicken breast)
+    var servingsUsedInRecipe: Double = 1.0
+    
     // Enhanced macro tracking for wizard interface
     var fiber: Double = 0.0      // in grams
     var sugar: Double = 0.0      // in grams
@@ -805,7 +808,7 @@ class Ingredient {
     var recipe: Recipe?
     
     /// Initialize a new ingredient with basic nutrition data
-    init(name: String, servingSize: Double, unit: String, calories: Double, protein: Double, carbs: Double, fat: Double) {
+    init(name: String, servingSize: Double, unit: String, calories: Double, protein: Double, carbs: Double, fat: Double, servingsUsedInRecipe: Double = 1.0) {
         self.id = UUID()
         self.name = name
         self.servingSize = servingSize
@@ -814,11 +817,12 @@ class Ingredient {
         self.protein = protein
         self.carbs = carbs
         self.fat = fat
+        self.servingsUsedInRecipe = servingsUsedInRecipe
         self.lastModified = Date()
     }
     
     /// Enhanced initializer with full macro tracking
-    init(name: String, servingSize: Double, unit: String, calories: Double, protein: Double, carbs: Double, fat: Double, fiber: Double = 0.0, sugar: Double = 0.0, sodium: Double = 0.0, cholesterol: Double = 0.0, category: String = "Other", brand: String? = nil, notes: String? = nil, preparationMethod: String? = nil, addedInStep: Int? = nil) {
+    init(name: String, servingSize: Double, unit: String, calories: Double, protein: Double, carbs: Double, fat: Double, servingsUsedInRecipe: Double = 1.0, fiber: Double = 0.0, sugar: Double = 0.0, sodium: Double = 0.0, cholesterol: Double = 0.0, category: String = "Other", brand: String? = nil, notes: String? = nil, preparationMethod: String? = nil, addedInStep: Int? = nil) {
         self.id = UUID()
         self.name = name
         self.servingSize = servingSize
@@ -827,6 +831,7 @@ class Ingredient {
         self.protein = protein
         self.carbs = carbs
         self.fat = fat
+        self.servingsUsedInRecipe = servingsUsedInRecipe
         self.fiber = fiber
         self.sugar = sugar
         self.sodium = sodium

@@ -4,7 +4,7 @@
   "servings": 12,
   "rating": 4.9,
   "backgroundImageName": "sourdough_premium",
-  "isLocked": true,
+  "isLocked": false,
   "category": "Baking",
   "difficulty": "Advanced",
   "description": "Traditional artisan sourdough with a perfectly crispy crust and tangy, airy crumb. Requires active sourdough starter and patience for the best results.",

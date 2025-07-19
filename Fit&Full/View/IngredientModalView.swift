@@ -31,6 +31,7 @@ struct IngredientModalView: View {
     @State private var selectedCategory: String = "Other"
     @State private var brand: String = ""
     @State private var preparationMethod: String = ""
+    @State private var servingsUsedInRecipe: String = "1.0"
     
     // Available options
     private let units = ["grams", "ounces", "cups", "tablespoons", "teaspoons", "pieces", "slices", "medium", "large", "small", "ml", "liters"]
@@ -189,6 +190,18 @@ struct IngredientModalView: View {
                         MacroField(title: "Fat", value: $fat, unit: "g", color: .blueAccent)
                     }
                 }
+                
+                // Servings used in recipe
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Servings Used in Recipe")
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundColor(.primary)
+                    
+                    TextField("1.0", text: $servingsUsedInRecipe)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .keyboardType(.decimalPad)
+                }
+                .frame(maxWidth: .infinity)
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 16)
@@ -263,6 +276,7 @@ struct IngredientModalView: View {
             selectedCategory = ingredient.category
             brand = ingredient.brand ?? ""
             preparationMethod = ingredient.preparationMethod ?? ""
+            servingsUsedInRecipe = String(ingredient.servingsUsedInRecipe)
         }
     }
     
@@ -280,6 +294,11 @@ struct IngredientModalView: View {
         
         guard let caloriesValue = Double(calories), caloriesValue >= 0 else {
             showValidationError("Please enter a valid calories value (0 or greater).")
+            return
+        }
+        
+        guard let servingsUsedValue = Double(servingsUsedInRecipe), servingsUsedValue > 0 else {
+            showValidationError("Please enter a valid servings used value greater than 0.")
             return
         }
         
@@ -307,6 +326,7 @@ struct IngredientModalView: View {
         ingredient.category = selectedCategory
         ingredient.brand = brand.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : brand.trimmingCharacters(in: .whitespacesAndNewlines)
         ingredient.preparationMethod = preparationMethod.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : preparationMethod.trimmingCharacters(in: .whitespacesAndNewlines)
+        ingredient.servingsUsedInRecipe = servingsUsedValue
         ingredient.lastModified = Date()
         
         // Call the save callback

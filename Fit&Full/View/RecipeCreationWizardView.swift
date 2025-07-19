@@ -681,19 +681,19 @@ struct RecipeCreationWizardView: View {
     // MARK: - Helper Functions
     
     private var totalCalories: Double {
-        ingredients.reduce(0) { $0 + $1.calories }
+        ingredients.reduce(0) { $0 + ($1.calories * $1.servingsUsedInRecipe) }
     }
     
     private var totalProtein: Double {
-        ingredients.reduce(0) { $0 + $1.protein }
+        ingredients.reduce(0) { $0 + ($1.protein * $1.servingsUsedInRecipe) }
     }
     
     private var totalCarbs: Double {
-        ingredients.reduce(0) { $0 + $1.carbs }
+        ingredients.reduce(0) { $0 + ($1.carbs * $1.servingsUsedInRecipe) }
     }
     
     private var totalFat: Double {
-        ingredients.reduce(0) { $0 + $1.fat }
+        ingredients.reduce(0) { $0 + ($1.fat * $1.servingsUsedInRecipe) }
     }
     
     private func saveIngredient(_ ingredient: Ingredient) {

@@ -4,7 +4,7 @@
   "servings": 6,
   "rating": 4.7,
   "backgroundImageName": "truffle_risotto_premium",
-  "isLocked": true,
+  "isLocked": false,
   "category": "Italian",
   "difficulty": "Intermediate",
   "description": "Luxurious creamy risotto with wild mushrooms and truffle oil, finished with aged Parmesan and fresh herbs for an elegant dining experience.",
