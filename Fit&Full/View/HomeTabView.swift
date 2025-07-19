@@ -12,6 +12,7 @@ struct HomeTabView: View {
     @StateObject private var premiumRecipeLoader = PremiumRecipeLoader()
     @State private var selectedLockedRecipe: PremiumRecipe?
     @State private var showingLockedRecipeAlert = false
+    @State private var showingRecipeCreation = false
 
     @Binding var backgroundColor: Color
     @Binding var accentTextColor: Color
@@ -43,6 +44,11 @@ struct HomeTabView: View {
             backgroundColor = .orangeSlightlyDarker
             accentTextColor = .orangeSlightlyDarker
             accentColor = .orangeAccent
+        }
+        .sheet(isPresented: $showingRecipeCreation) {
+            NavigationView {
+                RecipeCreationWizardView()
+            }
         }
         .alert("Premium Recipe", isPresented: $showingLockedRecipeAlert) {
             Button("Upgrade to Premium") {
@@ -80,7 +86,9 @@ struct HomeTabView: View {
     
     private func addRecipeComponent(mainText: String, secondaryText: String) -> some View {
         Group {
-            NavigationLink(destination: RecipeCreationWizardView()) {
+            Button(action: {
+                showingRecipeCreation = true
+            }) {
                 VStack(spacing: 12) {
                     Image(systemName: "plus.circle.fill")
                         .font(.system(size: 40))

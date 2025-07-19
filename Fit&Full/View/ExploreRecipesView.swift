@@ -30,7 +30,7 @@ struct ExploreRecipesView: View {
                 
                 // Popular recipes grid (mix of premium and regular)
                 VStack(alignment: .leading, spacing: 15) {
-                    Text("Free This Week")
+                    Text("New This Week")
                         .font(.headline)
                         .padding(.horizontal)
                     
@@ -58,12 +58,12 @@ struct ExploreRecipesView: View {
                 if !premiumRecipeLoader.premiumRecipes.isEmpty {
                     VStack(alignment: .leading, spacing: 15) {
                         HStack {
-                            Text("Premium Collection")
+                            Text("Popular Recipes")
                                 .font(.headline)
                             
-                            Image(systemName: "crown.fill")
-                                .foregroundColor(.orange)
-                                .font(.caption)
+//                            Image(systemName: "crown.fill")
+//                                .foregroundColor(.orange)
+//                                .font(.caption)
                             
                             Spacer()
                             

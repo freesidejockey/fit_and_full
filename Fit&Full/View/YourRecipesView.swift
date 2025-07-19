@@ -11,6 +11,7 @@ import SwiftData
 struct YourRecipesView: View {
     @Query(sort: \Recipe.createdDate, order: .reverse) private var recipes: [Recipe]
     @Environment(\.modelContext) private var modelContext
+    @State private var showingRecipeCreation = false
     
     var body: some View {
         ZStack {
@@ -54,7 +55,9 @@ struct YourRecipesView: View {
                                 .opacity(0.8)
                                 .multilineTextAlignment(.center)
                         
-                        NavigationLink(destination: RecipeCreationWizardView()) {
+                        Button(action: {
+                            showingRecipeCreation = true
+                        }) {
                             HStack {
                                 Image(systemName: "plus")
                                     .font(.system(size: 16, weight: .medium))
@@ -93,7 +96,9 @@ struct YourRecipesView: View {
                             }
                             
                             // Add new recipe placeholder
-                            NavigationLink(destination: RecipeCreationWizardView()) {
+                            Button(action: {
+                                showingRecipeCreation = true
+                            }) {
                                 VStack(alignment: .leading, spacing: 8) {
                                     Text("Add New Recipe")
                                         .font(.headline)
@@ -132,6 +137,11 @@ struct YourRecipesView: View {
                     
                     Spacer(minLength: 100) // Extra space for tab bar - matching HomeTabView
                 }
+            }
+        }
+        .sheet(isPresented: $showingRecipeCreation) {
+            NavigationView {
+                RecipeCreationWizardView()
             }
         }
         .navigationTitle("Your Recipes")
