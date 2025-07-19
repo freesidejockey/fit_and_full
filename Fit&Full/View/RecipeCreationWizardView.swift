@@ -29,9 +29,26 @@ struct RecipeCreationWizardView: View {
     @State private var isSaving = false
     @State private var showingCancelConfirmation = false
     
-    // Ingredient modal
-    @State private var showingIngredientModal = false
+    // Inline ingredient form
+    @State private var showingInlineIngredientForm = false
     @State private var editingIngredient: Ingredient?
+    
+    // Form field states
+    @State private var newIngredientName = ""
+    @State private var newIngredientServingSize = ""
+    @State private var newIngredientSelectedUnit = "grams"
+    @State private var newIngredientCalories = ""
+    @State private var newIngredientProtein = ""
+    @State private var newIngredientCarbs = ""
+    @State private var newIngredientFat = ""
+    @State private var newIngredientBrand = ""
+    @State private var newIngredientPreparationMethod = ""
+    @State private var newIngredientServingsUsedInRecipe = "1.0"
+    @State private var showingIngredientValidationAlert = false
+    @State private var ingredientValidationMessage = ""
+    
+    // Available options
+    private let units = ["grams", "ounces", "cups", "tablespoons", "teaspoons", "pieces", "slices", "medium", "large", "small", "ml", "liters"]
     
     // Step management
     @State private var showingStepEditor = false
@@ -105,11 +122,6 @@ struct RecipeCreationWizardView: View {
                 .foregroundColor(.orangeAccent)
             }
         }
-        .sheet(isPresented: $showingIngredientModal) {
-            IngredientModalView(ingredient: editingIngredient) { ingredient in
-                saveIngredient(ingredient)
-            }
-        }
         .alert("Cancel Recipe Creation", isPresented: $showingCancelConfirmation) {
             Button("Keep Editing", role: .cancel) { }
             Button("Discard", role: .destructive) {
@@ -127,6 +139,11 @@ struct RecipeCreationWizardView: View {
             Button("OK") { }
         } message: {
             Text(saveErrorMessage)
+        }
+        .alert("Ingredient Validation Error", isPresented: $showingIngredientValidationAlert) {
+            Button("OK") { }
+        } message: {
+            Text(ingredientValidationMessage)
         }
     }
     
@@ -282,12 +299,15 @@ struct RecipeCreationWizardView: View {
                 
                 Button(action: {
                     editingIngredient = nil
-                    showingIngredientModal = true
+                    clearIngredientForm()
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        showingInlineIngredientForm.toggle()
+                    }
                 }) {
                     HStack(spacing: 6) {
                         Image(systemName: "plus")
                             .font(.system(size: 14, weight: .semibold))
-                        Text("Add Ingredient")
+                        Text(showingInlineIngredientForm ? "Cancel" : "Add Ingredient")
                             .font(.system(size: 14, weight: .semibold))
                     }
                     .foregroundColor(.white)
@@ -298,6 +318,11 @@ struct RecipeCreationWizardView: View {
                             .fill(.orangeAccent)
                     )
                 }
+            }
+            
+            // Inline ingredient form
+            if showingInlineIngredientForm {
+                inlineIngredientForm
             }
             
             if ingredients.isEmpty {
@@ -323,7 +348,10 @@ struct RecipeCreationWizardView: View {
                             ingredient: ingredients[index],
                             onEdit: {
                                 editingIngredient = ingredients[index]
-                                showingIngredientModal = true
+                                loadIngredientFormData(ingredients[index])
+                                withAnimation(.easeInOut(duration: 0.3)) {
+                                    showingInlineIngredientForm = true
+                                }
                             },
                             onDelete: {
                                 ingredients.remove(at: index)
@@ -678,6 +706,129 @@ struct RecipeCreationWizardView: View {
         }
     }
     
+    // MARK: - Inline Ingredient Form
+    
+    private var inlineIngredientForm: some View {
+        VStack(spacing: 16) {
+            // Basic Information
+            VStack(alignment: .leading, spacing: 12) {
+                Text("Ingredient Details")
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundColor(.primary)
+                
+                // Ingredient name
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("Name")
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundColor(.primary)
+                    
+                    TextField("Enter ingredient name", text: $newIngredientName)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .autocapitalization(.words)
+                }
+                
+                // Serving size and unit
+                HStack(spacing: 12) {
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("Serving Size")
+                            .font(.system(size: 14, weight: .medium))
+                            .foregroundColor(.primary)
+                        
+                        TextField("1.0", text: $newIngredientServingSize)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                            .keyboardType(.decimalPad)
+                    }
+                    
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("Unit")
+                            .font(.system(size: 14, weight: .medium))
+                            .foregroundColor(.primary)
+                        
+                        Picker("Unit", selection: $newIngredientSelectedUnit) {
+                            ForEach(units, id: \.self) { unit in
+                                Text(unit).tag(unit)
+                            }
+                        }
+                        .pickerStyle(MenuPickerStyle())
+                        .frame(height: 36)
+                        .background(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(Color(.systemGray4), lineWidth: 1)
+                        )
+                    }
+                }
+                
+                // Nutrition Information
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("Nutrition (per serving)")
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundColor(.secondary)
+                    
+                    HStack(spacing: 12) {
+                        InlineNutritionField(title: "Calories", value: $newIngredientCalories, unit: "cal", color: .orangeAccent)
+                        InlineNutritionField(title: "Protein", value: $newIngredientProtein, unit: "g", color: .tealAccent)
+                    }
+                    
+                    HStack(spacing: 12) {
+                        InlineNutritionField(title: "Carbs", value: $newIngredientCarbs, unit: "g", color: .purpleAccent)
+                        InlineNutritionField(title: "Fat", value: $newIngredientFat, unit: "g", color: .blueAccent)
+                    }
+                }
+                
+                // Servings used in recipe
+                VStack(alignment: .leading, spacing: 6) {
+                    Text("Servings Used in Recipe")
+                        .font(.system(size: 14, weight: .medium))
+                        .foregroundColor(.primary)
+                    
+                    TextField("1.0", text: $newIngredientServingsUsedInRecipe)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .keyboardType(.decimalPad)
+                }
+            }
+            
+            // Action buttons
+            HStack(spacing: 12) {
+                Button("Cancel") {
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        showingInlineIngredientForm = false
+                    }
+                    clearIngredientForm()
+                }
+                .foregroundColor(.secondary)
+                .frame(maxWidth: .infinity)
+                .frame(height: 44)
+                .background(
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(Color(.systemGray4), lineWidth: 1)
+                )
+                
+                Button(editingIngredient != nil ? "Save" : "Add") {
+                    saveInlineIngredient()
+                }
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity)
+                .frame(height: 44)
+                .background(
+                    RoundedRectangle(cornerRadius: 8)
+                        .fill(.orangeAccent)
+                )
+                .disabled(newIngredientName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+            }
+        }
+        .padding(16)
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color(.systemBackground))
+                .stroke(.orangeAccent, lineWidth: 1)
+                .shadow(color: .black.opacity(0.1), radius: 2, x: 0, y: 1)
+        )
+        .transition(.asymmetric(
+            insertion: .scale(scale: 0.95).combined(with: .opacity),
+            removal: .scale(scale: 0.95).combined(with: .opacity)
+        ))
+    }
+    
     // MARK: - Helper Functions
     
     private var totalCalories: Double {
@@ -703,8 +854,97 @@ struct RecipeCreationWizardView: View {
         } else {
             ingredients.append(ingredient)
         }
-        showingIngredientModal = false
         editingIngredient = nil
+    }
+    
+    private func clearIngredientForm() {
+        newIngredientName = ""
+        newIngredientServingSize = ""
+        newIngredientSelectedUnit = "grams"
+        newIngredientCalories = ""
+        newIngredientProtein = ""
+        newIngredientCarbs = ""
+        newIngredientFat = ""
+        newIngredientBrand = ""
+        newIngredientPreparationMethod = ""
+        newIngredientServingsUsedInRecipe = "1.0"
+        editingIngredient = nil
+    }
+    
+    private func loadIngredientFormData(_ ingredient: Ingredient) {
+        newIngredientName = ingredient.name
+        newIngredientServingSize = String(ingredient.servingSize)
+        newIngredientSelectedUnit = ingredient.unit
+        newIngredientCalories = String(ingredient.calories)
+        newIngredientProtein = String(ingredient.protein)
+        newIngredientCarbs = String(ingredient.carbs)
+        newIngredientFat = String(ingredient.fat)
+        newIngredientBrand = ingredient.brand ?? ""
+        newIngredientPreparationMethod = ingredient.preparationMethod ?? ""
+        newIngredientServingsUsedInRecipe = String(ingredient.servingsUsedInRecipe)
+    }
+    
+    private func saveInlineIngredient() {
+        // Validate required fields
+        guard !newIngredientName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+            showIngredientValidationError("Please enter an ingredient name.")
+            return
+        }
+        
+        guard let servingSizeValue = Double(newIngredientServingSize), servingSizeValue > 0 else {
+            showIngredientValidationError("Please enter a valid serving size greater than 0.")
+            return
+        }
+        
+        guard let caloriesValue = Double(newIngredientCalories), caloriesValue >= 0 else {
+            showIngredientValidationError("Please enter a valid calories value (0 or greater).")
+            return
+        }
+        
+        guard let servingsUsedValue = Double(newIngredientServingsUsedInRecipe), servingsUsedValue > 0 else {
+            showIngredientValidationError("Please enter a valid servings used value greater than 0.")
+            return
+        }
+        
+        // Validate optional numeric fields
+        let proteinValue = Double(newIngredientProtein) ?? 0
+        let carbsValue = Double(newIngredientCarbs) ?? 0
+        let fatValue = Double(newIngredientFat) ?? 0
+        
+        // Create or update ingredient
+        let ingredient: Ingredient
+        if let editingIngredient = editingIngredient {
+            ingredient = editingIngredient
+        } else {
+            ingredient = Ingredient(name: "", servingSize: 1.0, unit: "grams", calories: 0, protein: 0, carbs: 0, fat: 0)
+        }
+        
+        // Update ingredient with form data
+        ingredient.name = newIngredientName.trimmingCharacters(in: .whitespacesAndNewlines)
+        ingredient.servingSize = servingSizeValue
+        ingredient.unit = newIngredientSelectedUnit
+        ingredient.calories = caloriesValue
+        ingredient.protein = proteinValue
+        ingredient.carbs = carbsValue
+        ingredient.fat = fatValue
+        ingredient.brand = newIngredientBrand.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : newIngredientBrand.trimmingCharacters(in: .whitespacesAndNewlines)
+        ingredient.preparationMethod = newIngredientPreparationMethod.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? nil : newIngredientPreparationMethod.trimmingCharacters(in: .whitespacesAndNewlines)
+        ingredient.servingsUsedInRecipe = servingsUsedValue
+        ingredient.lastModified = Date()
+        
+        // Save ingredient
+        saveIngredient(ingredient)
+        
+        // Hide form and clear data
+        withAnimation(.easeInOut(duration: 0.3)) {
+            showingInlineIngredientForm = false
+        }
+        clearIngredientForm()
+    }
+    
+    private func showIngredientValidationError(_ message: String) {
+        ingredientValidationMessage = message
+        showingIngredientValidationAlert = true
     }
     
     private func validateCurrentStep() -> Bool {
@@ -835,6 +1075,33 @@ struct WizardIngredientRow: View {
             RoundedRectangle(cornerRadius: 8)
                 .fill(Color(.systemGray6))
         )
+    }
+}
+
+struct InlineNutritionField: View {
+    let title: String
+    @Binding var value: String
+    let unit: String
+    let color: Color
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            HStack {
+                Text(title)
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundColor(color)
+                Spacer()
+                Text(unit)
+                    .font(.system(size: 10, weight: .medium))
+                    .foregroundColor(.secondary)
+            }
+            
+            TextField("0", text: $value)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .keyboardType(.decimalPad)
+                .font(.system(size: 14))
+        }
+        .frame(maxWidth: .infinity)
     }
 }
 
